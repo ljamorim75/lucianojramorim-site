@@ -727,13 +727,14 @@ section { scroll-margin-top: 96px; }
 .author-copy .lead {
   margin: 30px 0 22px;
   font-family: "Playfair Display", serif;
-  font-size: clamp(1.5rem, 2.3vw, 2.3rem);
+  font-size: clamp(1.35rem, 2.05vw, 2.25rem);
   line-height: 1.4;
   color: #dfe4e7;
 }
 
 .author-copy p:not(.lead) {
   max-width: 720px;
+  font-family: "Inter", system-ui, sans-serif;
   color: var(--muted);
   line-height: 1.85;
   font-size: 1.03rem;
@@ -922,7 +923,7 @@ section { scroll-margin-top: 96px; }
   }
 
   .author-copy .lead {
-    font-size: 1.45rem;
+    font-size: clamp(1.25rem, 5.7vw, 1.8rem);
   }
 
   .site-footer {
@@ -968,7 +969,6 @@ section { scroll-margin-top: 96px; }
 
 /* Escala comum para os textos explicativos das seções. */
 .world-content p:not(.world-number),
-.author-copy .lead,
 .author-copy p:not(.lead),
 .contact p:not(.section-kicker) {
   font-size: 1.125rem;

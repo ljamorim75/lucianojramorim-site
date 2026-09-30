@@ -734,7 +734,7 @@ section { scroll-margin-top: 96px; }
 
 .author-copy p:not(.lead) {
   max-width: 720px;
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Playfair Display", serif;
   color: var(--muted);
   line-height: 1.85;
   font-size: 1.03rem;

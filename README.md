@@ -1,25 +1,20 @@
-# Home — Luciano Jr. Amorim
+# Luciano Jr Amorim — Versão 11
 
-Primeira versão estática da página inicial.
+## Publicação no GitHub Pages
 
-Arquivos:
-- index.html
-- styles.css
-- script.js
+Substitua index.html, styles.css e script.js na pasta já publicada pelo GitHub Pages.
+Mantenha a pasta images no mesmo nível; as seis imagens originais estão incluídas, sem alterações.
+Preserve o arquivo CNAME e as configurações existentes do repositório.
+Não é necessário instalar dependências nem executar uma compilação.
 
-Como visualizar:
-1. Abra `index.html` no navegador.
-2. Para publicar depois, podemos usar GitHub Pages.
-3. As artes de Centauri e Nova Aurora são placeholders em CSS por enquanto.
-   Quando definirmos as imagens finais, substituímos os blocos visuais por arquivos reais.
+## Alterações
 
-Estrutura atual:
-- Hero
-- Visão
-- Mundos em Construção
-- Obras
-- Autor
-- Contato
+- Nome sem ponto após Jr e retirada de AUTOR ao lado da marca.
+- Títulos das cinco seções com escala comum: 42–80 px, conforme a largura da tela.
+- Fundo fixo com crossfade de 3 segundos por seção.
+- Capa: Nova Aurora e Centauri alternam a cada 60 segundos enquanto a capa está ativa.
+- Visão: Aureum Hall. Obras: eixo central da Centauri.
+- Mundos: painéis originais. Autor: retrato original. Contato: fundo escuro.
+- Preferência por movimento reduzido desativa as animações e a alternância automática.
 
-Domínio planejado:
-lucianojramorim.com.br
+Os links dos mundos continuam com o destino provisório # da versão original.

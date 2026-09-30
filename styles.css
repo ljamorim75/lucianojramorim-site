@@ -10,6 +10,7 @@
   --line-strong: rgba(255,255,255,.18);
   --accent: #d7dde2;
   --max: 1240px;
+  --section-title-size: clamp(2.625rem, 5.6vw, 5rem);
 }
 
 * {
@@ -87,12 +88,6 @@ button {
   letter-spacing: -.035em;
 }
 
-.brand-sub {
-  font-size: .62rem;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--muted-2);
-}
 
 .main-nav {
   display: flex;
@@ -151,44 +146,45 @@ button {
   border-bottom: 1px solid var(--line);
 }
 
-.hero-background {
-  position: absolute;
+/* A camada fixa permanece imóvel enquanto o conteúdo rola. */
+.site-background {
+  position: fixed;
   inset: 0;
   z-index: 0;
+  pointer-events: none;
+  background: var(--bg);
   overflow: hidden;
 }
 
-.hero-bg {
+.background-layer {
   position: absolute;
   inset: 0;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: var(--background-image) center / cover no-repeat;
   opacity: 0;
-  transform: scale(1.015);
-  transition: opacity 3s ease-in-out, transform 10s ease-out;
+  transition: opacity 3s ease-in-out;
 }
 
-.hero-bg.active {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.hero-bg-aurora {
-  background-image: url("images/nova-aurora.png");
-}
-
-.hero-bg-centauri {
-  background-image: url("images/centauri.png");
-}
-
-.hero-bg-shade {
+.background-layer::after {
+  content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(90deg, rgba(5,7,9,.88) 0%, rgba(5,7,9,.72) 36%, rgba(5,7,9,.30) 67%, rgba(5,7,9,.16) 100%),
-    linear-gradient(to bottom, rgba(5,7,9,.20), rgba(5,7,9,.30));
+  background: linear-gradient(90deg, rgba(5,7,9,.86), rgba(5,7,9,.65) 40%, rgba(5,7,9,.40)),
+    linear-gradient(to bottom, rgba(5,7,9,.15), rgba(5,7,9,.35));
 }
+
+.background-layer.active { opacity: 1; }
+.background-aurora { --background-image: url("images/nova-aurora.png"); }
+.background-centauri { --background-image: url("images/centauri.png"); }
+.background-visao { --background-image: url("images/aureum-hall.png"); }
+.background-obras { --background-image: url("images/works-centauri-interior.png"); }
+
+main,
+.site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+section { scroll-margin-top: 96px; }
 
 .hero-grid {
   position: absolute;
@@ -343,26 +339,6 @@ button {
   overflow: hidden;
 }
 
-.statement-background,
-.statement-shade {
-  position: absolute;
-  inset: 0;
-}
-
-.statement-background {
-  background-image: url("images/aureum-hall.png");
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  transform: scale(1.02);
-}
-
-.statement-shade {
-  background:
-    linear-gradient(90deg, rgba(5,7,9,.82) 0%, rgba(5,7,9,.64) 40%, rgba(5,7,9,.56) 100%),
-    linear-gradient(to bottom, rgba(5,7,9,.18) 0%, rgba(5,7,9,.44) 100%);
-}
-
 .statement-inner {
   position: relative;
   z-index: 2;
@@ -393,12 +369,13 @@ button {
   font-family: "Playfair Display", serif;
   font-weight: 500;
   letter-spacing: -.03em;
+  font-size: var(--section-title-size);
+  line-height: 1.04;
+  overflow-wrap: break-word;
 }
 
 .statement h2 {
   max-width: 760px;
-  font-size: clamp(3rem, 6vw, 6.6rem);
-  line-height: 1;
 }
 
 .statement-copy {
@@ -429,8 +406,6 @@ button {
 .section-head h2 {
   margin-top: 18px;
   max-width: 780px;
-  font-size: clamp(2.2rem, 4vw, 4.2rem);
-  line-height: 1.08;
 }
 
 .world-grid {
@@ -635,26 +610,6 @@ button {
   overflow: hidden;
 }
 
-.works-background,
-.works-shade {
-  position: absolute;
-  inset: 0;
-}
-
-.works-background {
-  background-image: url("images/works-centauri-interior.png");
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  transform: scale(1.02);
-}
-
-.works-shade {
-  background:
-    linear-gradient(90deg, rgba(5,7,9,.84) 0%, rgba(5,7,9,.64) 42%, rgba(5,7,9,.70) 100%),
-    linear-gradient(to bottom, rgba(5,7,9,.24) 0%, rgba(5,7,9,.58) 100%);
-}
-
 .works-inner {
   position: relative;
   z-index: 2;
@@ -665,14 +620,12 @@ button {
 
 .works-layout {
   display: grid;
-  grid-template-columns: .78fr 1.22fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 70px;
   margin-top: 50px;
 }
 
 .works-title h2 {
-  font-size: clamp(2.6rem, 4.8vw, 5.2rem);
-  line-height: 1.04;
   text-shadow: 0 2px 24px rgba(0,0,0,.48);
 }
 
@@ -771,10 +724,6 @@ button {
   opacity: .60;
 }
 
-.author-copy h2 {
-  font-size: clamp(3rem, 5vw, 5.4rem);
-}
-
 .author-copy .lead {
   margin: 30px 0 22px;
   font-family: "Playfair Display", serif;
@@ -800,8 +749,6 @@ button {
 
 .contact h2 {
   margin-top: 20px;
-  font-size: clamp(3rem, 6vw, 6.5rem);
-  line-height: 1;
 }
 
 .contact p:not(.section-kicker) {
@@ -824,9 +771,14 @@ button {
 }
 
 .reveal {
+  opacity: 1;
+  transform: none;
+  transition: opacity .8s ease, transform .8s ease;
+}
+
+.reveal.reveal-pending {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity .8s ease, transform .8s ease;
 }
 
 .reveal.visible {
@@ -920,10 +872,7 @@ button {
     font-size: 2rem;
   }
 
-  .brand-sub {
-    display: none;
-  }
-
+  
   .hero {
     min-height: 92svh;
     padding: 110px 22px 64px;
@@ -948,16 +897,7 @@ button {
     padding: 82px 0;
   }
 
-  .statement h2 {
-    font-size: 3.4rem;
-  }
 
-  .section-head h2,
-  .works-title h2,
-  .author-copy h2,
-  .contact h2 {
-    font-size: 3rem;
-  }
 
   .world-card {
     min-height: 540px;
@@ -1024,4 +964,32 @@ button {
 
 .statement-grid-single {
   grid-template-columns: 1fr;
+}
+
+/* Escala comum para os textos explicativos das seções. */
+.world-content p:not(.world-number),
+.author-copy .lead,
+.author-copy p:not(.lead),
+.contact p:not(.section-kicker) {
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 620px) {
+  :root { --section-title-size: clamp(2.625rem, 8.4vw, 3.25rem); }
+  section { scroll-margin-top: 82px; }
+  .statement, .works { width: 100%; padding: 0; }
+  .statement-inner, .works-inner { width: calc(100% - 40px); padding: 82px 0; }
+  .brand { min-width: 0; }
+  .brand-name { font-size: clamp(1.4rem, 7vw, 2rem); }
+  .menu-toggle { flex-shrink: 0; }
+  .contact-actions .btn { max-width: 100%; overflow-wrap: anywhere; text-align: center; }
+  .author-panel { padding: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; }
+  .reveal.reveal-pending { opacity: 1; transform: none; }
+  .world-card:hover .world-art { transform: none; }
 }

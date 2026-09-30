@@ -6,9 +6,6 @@
   <meta name="description" content="Site oficial de Luciano Jr Amorim — histórias sobre sociedades levadas aos seus extremos." />
   <title>Luciano Jr Amorim</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -49,8 +46,8 @@
         <p class="eyebrow">Ficção especulativa • ficção científica</p>
         <p class="hero-kicker">Site oficial</p>
         <h1 class="hero-manifesto">
-          <span>Histórias sobre sociedades com ideias levadas aos extremos</span>
-          <span>Entre mérito, tecnologia, controle, sobrevivência e os limites do progresso.</span>
+          <span class="hero-manifesto-left">Histórias sobre sociedades com ideias levadas aos extremos</span>
+          <span class="hero-manifesto-right">Entre mérito, tecnologia, controle, sobrevivência e os limites do progresso.</span>
         </h1>
         <div class="hero-actions">
           <a class="btn primary" href="#mundos">Explorar os mundos</a>
@@ -69,8 +66,9 @@
     <section id="visao" class="section statement">
       <div class="statement-inner">
         <div class="section-kicker reveal">01 — Visão</div>
-        <div class="statement-grid statement-grid-single">
-          <h2 class="reveal">Toda sociedade tem uma promessa.</h2>
+        <div class="statement-grid vision-grid">
+          <h2 class="reveal vision-lead">Toda sociedade tem uma promessa.</h2>
+          <h2 class="reveal vision-promise"><span>Merecimento.</span><span>Avanço científico.</span></h2>
         </div>
       </div>
     </section>
@@ -79,12 +77,12 @@
       <div class="section-head">
         <div>
           <div class="section-kicker reveal">02 — Mundos em construção</div>
-          <h2 class="reveal">Dois universos. Duas formas de atravessar o limite.</h2>
+          <h2 class="reveal">Universos e suas formas de atravessar o limite.</h2>
         </div>
       </div>
 
       <div class="world-grid">
-        <article class="world-card centauri reveal">
+        <a class="world-card centauri reveal" href="centauri/index.html" aria-label="Entrar no universo de Centauri">
           <div class="world-art world-art-centauri" role="img" aria-label="Centauri I viajando pelo espaço profundo em direção a Alpha Centauri"></div>
 
           <div class="world-overlay"></div>
@@ -96,11 +94,10 @@
               Uma missão interestelar de décadas. Uma comunidade fechada.
               E o peso de construir um futuro sem poder voltar para casa.
             </p>
-            <a href="#" class="text-link">Entrar em Centauri <span>↗</span></a>
           </div>
-        </article>
+        </a>
 
-        <article class="world-card aurora reveal">
+        <a class="world-card aurora reveal" href="nova-aurora/index.html" aria-label="Entrar no universo de Nova Aurora">
           <div class="world-art world-art-aurora" role="img" aria-label="Nova Aurora, cidade circular iluminada sob um céu noturno"></div>
 
           <div class="world-overlay"></div>
@@ -112,9 +109,8 @@
               Uma cidade organizada por mérito. Três anéis, uma hierarquia
               impecável e um sistema que precisa continuar parecendo justo.
             </p>
-            <a href="#" class="text-link">Entrar em Nova Aurora <span>↗</span></a>
           </div>
-        </article>
+        </a>
       </div>
     </section>
 
@@ -199,8 +195,11 @@
   </main>
 
   <footer class="site-footer">
-    <span>© <span id="year"></span> Luciano Jr Amorim</span>
-    <span>lucianojramorim.com.br</span>
+    <div class="footer-main">
+      <span>© <span id="year"></span> Luciano Jr Amorim. Todos os direitos reservados.</span>
+      <span>lucianojramorim.com.br</span>
+    </div>
+    <p class="copyright-notice">É proibida a reprodução, distribuição, adaptação ou utilização dos textos, imagens, conceitos e demais conteúdos deste site, total ou parcialmente, sem autorização expressa do autor.</p>
   </footer>
 
   <script src="script.js"></script>

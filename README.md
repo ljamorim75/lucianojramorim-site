@@ -1,22 +1,18 @@
-# Luciano Jr Amorim — Versão 12
+# Luciano Jr Amorim — Preview v15.3
 
-Ajuste desta versão: frase de apresentação do autor com o mesmo tamanho responsivo do manifesto da capa; pergunta na fonte padrão Inter. Para atualizar a versão 11, substitua apenas styles.css.
+Versão local de revisão. Não publicada no GitHub.
 
-## Publicação no GitHub Pages
+Alterações em relação à v15.1:
+- seção Visão em composição esquerda/direita: “Toda sociedade tem uma promessa.” / “Merecimento. Avanço científico.”;
+- frase de Mundos em construção alterada para “Universos e suas formas de atravessar o limite.”;
+- assinatura “Luciano Jr Amorim” ampliada discretamente no canto superior esquerdo, em todas as páginas.
 
-Substitua index.html, styles.css e script.js na pasta já publicada pelo GitHub Pages.
-Mantenha a pasta images no mesmo nível; as seis imagens originais estão incluídas, sem alterações.
-Preserve o arquivo CNAME e as configurações existentes do repositório.
-Não é necessário instalar dependências nem executar uma compilação.
+Mantidos: Times New Roman, escala tipográfica, painéis clicáveis dos mundos, páginas Nova Aurora e Centauri, navegação interna e aviso de direitos autorais.
 
-## Alterações
 
-- Nome sem ponto após Jr e retirada de AUTOR ao lado da marca.
-- Títulos das cinco seções com escala comum: 42–80 px, conforme a largura da tela.
-- Fundo fixo com crossfade de 3 segundos por seção.
-- Capa: Nova Aurora e Centauri alternam a cada 60 segundos enquanto a capa está ativa.
-- Visão: Aureum Hall. Obras: eixo central da Centauri.
-- Mundos: painéis originais. Autor: retrato original. Contato: fundo escuro.
-- Preferência por movimento reduzido desativa as animações e a alternância automática.
-
-Os links dos mundos continuam com o destino provisório # da versão original.
+## Ajustes da v15.3
+- Topbar fixa também nas páginas Nova Aurora e Centauri.
+- A topbar das páginas internas passa a ser a própria navegação do universo, com item ativo seguindo a rolagem.
+- Removida a segunda barra de navegação redundante das páginas internas.
+- Correção cronológica em Centauri: século XXIII no contexto que antecede a partida de 2248.
+- Espaçamentos das páginas internas recalibrados após a unificação da navegação.

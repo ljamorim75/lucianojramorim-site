@@ -1,4 +1,6 @@
-# Luciano Jr Amorim — Versão 11
+# Luciano Jr Amorim — Versão 12
+
+Ajuste desta versão: frase de apresentação do autor com o mesmo tamanho responsivo do manifesto da capa; pergunta na fonte padrão Inter. Para atualizar a versão 11, substitua apenas styles.css.
 
 ## Publicação no GitHub Pages
 

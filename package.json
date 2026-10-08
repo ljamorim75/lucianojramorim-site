@@ -1,0 +1,9 @@
+{
+  "name": "luciano-jr-amorim",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/serve.mjs"
+  }
+}

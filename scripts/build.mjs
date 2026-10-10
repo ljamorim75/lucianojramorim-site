@@ -18,13 +18,25 @@ const works = isProduction
 
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
-await cp(path.join(src, 'assets'), path.join(dist, 'assets'), { recursive: true });
 
-const hasEmblem = existsSync(path.join(src, 'assets', 'img', 'lja-emblema.png'));
+await cp(
+  path.join(src, 'assets'),
+  path.join(dist, 'assets'),
+  { recursive: true }
+);
 
-const emblem = (className = 'brand-mark') => hasEmblem
-  ? `<img class="${className}" src="/assets/img/lja-emblema.png" alt="Emblema LJA" width="1280" height="1280">`
-  : `<span class="${className === 'hero-mark' ? 'hero-placeholder' : 'brand-placeholder'}" aria-label="Espaço reservado para o emblema LJA">LJA</span>`;
+const hasEmblem = existsSync(
+  path.join(src, 'assets', 'img', 'lja-emblema.png')
+);
+
+const emblem = (className = 'brand-mark') =>
+  hasEmblem
+    ? `<img class="${className}" src="/assets/img/lja-emblema.png" alt="Emblema LJA" width="1280" height="1280">`
+    : `<span class="${
+        className === 'hero-mark'
+          ? 'hero-placeholder'
+          : 'brand-placeholder'
+      }" aria-label="Espaço reservado para o emblema LJA">LJA</span>`;
 
 const navItems = [
   ['inicio', '/', 'Início'],
@@ -48,7 +60,9 @@ function layout({
   const nav = navItems
     .map(
       ([key, href, label]) =>
-        `<a href="${href}"${current === key ? ' aria-current="page"' : ''}>${label}</a>`
+        `<a href="${href}"${
+          current === key ? ' aria-current="page"' : ''
+        }>${label}</a>`
     )
     .join('');
 
@@ -59,7 +73,13 @@ function layout({
       : `  <footer class="site-footer">
     <div class="shell footer-grid">
       <div class="footer-title">Luciano Jr Amorim</div>
-      <nav class="footer-links" aria-label="Navegação do rodapé"><a href="/textos/">Textos</a><a href="/autor/">Autor</a><a href="/contato/">Contato</a></nav>
+
+      <nav class="footer-links" aria-label="Navegação do rodapé">
+        <a href="/textos/">Textos</a>
+        <a href="/autor/">Autor</a>
+        <a href="/contato/">Contato</a>
+      </nav>
+
       <div class="footer-copy">© Luciano Jr Amorim. Todos os direitos reservados.</div>
     </div>
   </footer>`;
@@ -69,28 +89,43 @@ function layout({
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>${title}</title>
+
   <meta name="description" content="${description}">
   <meta name="theme-color" content="#070708">
+
   <link rel="canonical" href="${canonical}">
+
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="Luciano Jr Amorim">
   <meta property="og:title" content="${title}">
   <meta property="og:description" content="${description}">
   <meta property="og:url" content="${canonical}">
+
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="${title}">
   <meta name="twitter:description" content="${description}">
+
   <link rel="stylesheet" href="/assets/css/site.css">
+
   ${schema}
 </head>
+
 <body${isHome ? ' class="home-page"' : ''}>
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
   <header class="site-header">
     <div class="shell header-inner">
-      <a class="brand" href="/" aria-label="Luciano Jr Amorim — Início">${emblem()}<span>Luciano Jr Amorim</span></a>
+      <a
+        class="brand"
+        href="/"
+        aria-label="Luciano Jr Amorim — Início"
+      >
+        ${emblem()}
+        <span>Luciano Jr Amorim</span>
+      </a>
 
       <button
         class="menu-button"
@@ -107,7 +142,9 @@ function layout({
         aria-label="Navegação principal"
         data-menu
         data-open="false"
-      >${nav}</nav>
+      >
+        ${nav}
+      </nav>
     </div>
   </header>
 
@@ -121,13 +158,19 @@ ${footer}
 }
 
 async function writePage(route, html) {
-  const target = route === '/' ? dist : path.join(dist, route);
+  const target =
+    route === '/'
+      ? dist
+      : path.join(dist, route);
 
   await mkdir(target, { recursive: true });
-  await writeFile(path.join(target, 'index.html'), html, 'utf8');
-}
 
-const primary = works[0] ?? null;
+  await writeFile(
+    path.join(target, 'index.html'),
+    html,
+    'utf8'
+  );
+}
 
 const personSchema =
   `<script type="application/ld+json">${JSON.stringify({
@@ -137,30 +180,107 @@ const personSchema =
     url: domain
   })}</script>`;
 
-const homeSlots = [primary, ...Array(5).fill(null)];
+/*
+ * HOME
+ *
+ * Exibe até seis obras.
+ * Os slots restantes são preenchidos automaticamente
+ * como espaços reservados para textos futuros.
+ */
+
+const visibleWorks = works.slice(0, 6);
+
+const homeSlots = [
+  ...visibleWorks,
+  ...Array(
+    Math.max(0, 6 - visibleWorks.length)
+  ).fill(null)
+];
 
 const homeItems = homeSlots
   .map((work, index) => {
     const number =
-      work?.numero ?? String(index + 1).padStart(2, '0');
+      work?.numero ??
+      String(index + 1).padStart(2, '0');
 
     if (!work) {
-      return `<li class="home-work home-work--future" aria-label="Slot ${number} reservado para texto futuro"><div class="home-work-placeholder"><span class="home-work-number">${number}</span></div></li>`;
+      return `<li
+        class="home-work home-work--future"
+        aria-label="Slot ${number} reservado para texto futuro"
+      >
+        <div class="home-work-placeholder">
+          <span class="home-work-number">${number}</span>
+        </div>
+      </li>`;
     }
 
-    return `<li class="home-work home-work--available"><a class="home-work-link" href="/textos/${work.slug}/" data-home-work><span class="home-work-media" aria-hidden="true"><img src="/assets/img/monaksia-estacao-orbital" alt="" width="1672" height="941"></span><span class="home-work-number">${number}</span><span class="home-work-composition"><span class="home-work-title">${work.titulo}</span><span class="home-work-details"><span class="home-work-meta">${work.tipo} · ${work.genero}</span><span class="home-work-synopsis">${work.sinopse}</span><span class="home-work-action">Ler ${work.titulo}</span></span></span></a></li>`;
+    const media = work.imagem
+      ? `<span
+          class="home-work-media"
+          aria-hidden="true"
+        >
+          <img
+            src="${work.imagem}"
+            alt=""
+          >
+        </span>`
+      : '';
+
+    return `<li class="home-work home-work--available">
+      <a
+        class="home-work-link"
+        href="/textos/${work.slug}/"
+        data-home-work
+      >
+        ${media}
+
+        <span class="home-work-number">
+          ${number}
+        </span>
+
+        <span class="home-work-composition">
+          <span class="home-work-title">
+            ${work.titulo}
+          </span>
+
+          <span class="home-work-details">
+            <span class="home-work-meta">
+              ${work.tipo} · ${work.genero}
+            </span>
+
+            <span class="home-work-synopsis">
+              ${work.sinopse}
+            </span>
+
+            <span class="home-work-action">
+              Ler ${work.titulo}
+            </span>
+          </span>
+        </span>
+      </a>
+    </li>`;
   })
   .join('');
 
 const home =
-  `<nav class="home-library-nav" aria-label="Biblioteca de textos"><ol class="home-library">${homeItems}</ol></nav>`;
+  `<nav
+    class="home-library-nav"
+    aria-label="Biblioteca de textos"
+  >
+    <ol class="home-library">
+      ${homeItems}
+    </ol>
+  </nav>`;
 
 await writePage(
   '/',
   layout({
-    title: 'Luciano Jr Amorim — Ficção especulativa',
+    title:
+      'Luciano Jr Amorim — Ficção especulativa',
+
     description:
       'Textos de ficção especulativa de Luciano Jr Amorim sobre tecnologia, isolamento, controle e experiência humana.',
+
     route: '/',
     current: 'inicio',
     content: home,
@@ -168,49 +288,170 @@ await writePage(
   })
 );
 
+/*
+ * CATÁLOGO
+ */
+
 const catalogue = works
   .map(
     (work) =>
-      `<a class="catalogue-item" href="/textos/${work.slug}/"><span class="catalogue-number">${work.numero}</span><div><h2>${work.titulo}</h2><span class="catalogue-meta">${work.tipo} · ${work.genero}</span></div><p>${work.sinopse}</p></a>`
+      `<a
+        class="catalogue-item"
+        href="/textos/${work.slug}/"
+      >
+        <span class="catalogue-number">
+          ${work.numero}
+        </span>
+
+        <div>
+          <h2>${work.titulo}</h2>
+
+          <span class="catalogue-meta">
+            ${work.tipo} · ${work.genero}
+          </span>
+        </div>
+
+        <p>${work.sinopse}</p>
+      </a>`
   )
   .join('');
 
 await writePage(
   '/textos/',
   layout({
-    title: 'Textos — Luciano Jr Amorim',
+    title:
+      'Textos — Luciano Jr Amorim',
+
     description:
       'Biblioteca de contos e textos de ficção especulativa de Luciano Jr Amorim.',
+
     route: '/textos/',
     current: 'textos',
-    content: `<header class="page-intro"><div class="shell"><p class="eyebrow">Biblioteca</p><h1>Textos</h1><p class="lede">Obras curtas de ficção especulativa, reunidas em uma biblioteca em expansão.</p><div class="catalogue">${catalogue}</div></div></header>`
+
+    content:
+      `<header class="page-intro">
+        <div class="shell">
+          <p class="eyebrow">
+            Biblioteca
+          </p>
+
+          <h1>Textos</h1>
+
+          <p class="lede">
+            Obras curtas de ficção especulativa,
+            reunidas em uma biblioteca em expansão.
+          </p>
+
+          <div class="catalogue">
+            ${catalogue}
+          </div>
+        </div>
+      </header>`
   })
 );
+
+/*
+ * AUTOR
+ */
 
 await writePage(
   '/autor/',
   layout({
-    title: 'Autor — Luciano Jr Amorim',
+    title:
+      'Autor — Luciano Jr Amorim',
+
     description:
       'Conheça a proposta literária de Luciano Jr Amorim, autor de ficção especulativa.',
+
     route: '/autor/',
     current: 'autor',
-    content: `<header class="page-intro"><div class="shell section-grid"><div><p class="eyebrow">Autor</p><h1>Luciano<br>Jr Amorim</h1></div><div class="section-copy"><p class="lede">Luciano Jr Amorim escreve ficção especulativa sobre tecnologia, sistemas, isolamento e as formas pelas quais ideias levadas ao limite transformam a experiência humana.</p><div class="actions"><a class="button button-secondary" href="/textos/">Ver textos</a></div></div></div></header>`,
+
+    content:
+      `<header class="page-intro">
+        <div class="shell section-grid">
+          <div>
+            <p class="eyebrow">
+              Autor
+            </p>
+
+            <h1>
+              Luciano<br>
+              Jr Amorim
+            </h1>
+          </div>
+
+          <div class="section-copy">
+            <p class="lede">
+              Luciano Jr Amorim escreve ficção especulativa
+              sobre tecnologia, sistemas, isolamento e as formas
+              pelas quais ideias levadas ao limite transformam
+              a experiência humana.
+            </p>
+
+            <div class="actions">
+              <a
+                class="button button-secondary"
+                href="/textos/"
+              >
+                Ver textos
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>`,
+
     schema: personSchema
   })
 );
 
+/*
+ * CONTATO
+ */
+
 await writePage(
   '/contato/',
   layout({
-    title: 'Contato — Luciano Jr Amorim',
+    title:
+      'Contato — Luciano Jr Amorim',
+
     description:
       'Contato para questões relacionadas aos textos e projetos literários de Luciano Jr Amorim.',
+
     route: '/contato/',
     current: 'contato',
-    content: `<header class="page-intro"><div class="shell section-grid"><div><p class="eyebrow">Contato</p><h1>Contato</h1></div><div class="section-copy"><p class="lede">Para questões relacionadas aos textos, projetos literários, convites ou outras formas de contato.</p><div class="contact-placeholder"><p>Canal de contato em definição.</p></div></div></div></header>`
+
+    content:
+      `<header class="page-intro">
+        <div class="shell section-grid">
+          <div>
+            <p class="eyebrow">
+              Contato
+            </p>
+
+            <h1>Contato</h1>
+          </div>
+
+          <div class="section-copy">
+            <p class="lede">
+              Para questões relacionadas aos textos,
+              projetos literários, convites ou outras
+              formas de contato.
+            </p>
+
+            <div class="contact-placeholder">
+              <p>
+                Canal de contato em definição.
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>`
   })
 );
+
+/*
+ * PÁGINAS INDIVIDUAIS DAS OBRAS
+ */
 
 for (const work of works) {
   const manuscript = await readFile(
@@ -226,15 +467,22 @@ for (const work of works) {
   const creativeWorkSchema =
     `<script type="application/ld+json">${JSON.stringify({
       '@context': 'https://schema.org',
+
       '@type': 'ShortStory',
+
       name: work.titulo,
+
       author: {
         '@type': 'Person',
         name: 'Luciano Jr Amorim'
       },
+
       genre: work.genero,
+
       description: work.sinopse,
-      url: `${domain}/textos/${work.slug}/`
+
+      url:
+        `${domain}/textos/${work.slug}/`
     })}</script>`;
 
   const readingTime =
@@ -246,79 +494,186 @@ for (const work of works) {
       : '';
 
   const story =
-    `<div class="reading-progress" data-reading-progress aria-hidden="true"></div>` +
-    `<header class="story-header"><div class="shell">` +
-    `<p class="eyebrow">${work.tipo} · ${work.genero}</p>` +
-    `<h1>${work.titulo}</h1>` +
-    `<p class="story-byline">um conto de Luciano Jr Amorim</p>` +
-    `<div class="story-meta">${readingTime}<a href="#inicio-leitura">Começar leitura</a></div>` +
-    `</div></header>` +
-    `<div class="reading-toolbar" aria-label="Tamanho do texto">` +
-    `<span>Texto</span>` +
-    `<button type="button" data-font-size="normal" aria-pressed="true" aria-label="Tamanho de texto normal">A</button>` +
-    `<button type="button" data-font-size="large" aria-pressed="false" aria-label="Texto maior">A+</button>` +
-    `</div>` +
-    `<article class="story-content" id="inicio-leitura" data-reading-content>${manuscript}</article>` +
-    `<footer class="story-end">` +
-    `<p>${work.titulo}</p>` +
-    `<p>Luciano Jr Amorim</p>` +
-    `<p class="story-copyright">© Luciano Jr Amorim. Todos os direitos reservados.</p>` +
-    `<a href="/textos/">← Voltar aos textos</a>` +
-    `</footer>`;
+    `<div
+      class="reading-progress"
+      data-reading-progress
+      aria-hidden="true"
+    ></div>` +
+
+    `<header class="story-header">
+      <div class="shell">
+        <p class="eyebrow">
+          ${work.tipo} · ${work.genero}
+        </p>
+
+        <h1>${work.titulo}</h1>
+
+        <p class="story-byline">
+          um conto de Luciano Jr Amorim
+        </p>
+
+        <div class="story-meta">
+          ${readingTime}
+
+          <a href="#inicio-leitura">
+            Começar leitura
+          </a>
+        </div>
+      </div>
+    </header>` +
+
+    `<div
+      class="reading-toolbar"
+      aria-label="Tamanho do texto"
+    >
+      <span>Texto</span>
+
+      <button
+        type="button"
+        data-font-size="normal"
+        aria-pressed="true"
+        aria-label="Tamanho de texto normal"
+      >
+        A
+      </button>
+
+      <button
+        type="button"
+        data-font-size="large"
+        aria-pressed="false"
+        aria-label="Texto maior"
+      >
+        A+
+      </button>
+    </div>` +
+
+    `<article
+      class="story-content"
+      id="inicio-leitura"
+      data-reading-content
+    >
+      ${manuscript}
+    </article>` +
+
+    `<footer class="story-end">
+      <p>${work.titulo}</p>
+
+      <p>
+        Luciano Jr Amorim
+      </p>
+
+      <p class="story-copyright">
+        © Luciano Jr Amorim.
+        Todos os direitos reservados.
+      </p>
+
+      <a href="/textos/">
+        ← Voltar aos textos
+      </a>
+    </footer>`;
 
   await writePage(
     `/textos/${work.slug}/`,
     layout({
-      title: `${work.titulo} — Luciano Jr Amorim`,
-      description: work.sinopse,
-      route: `/textos/${work.slug}/`,
-      current: 'textos',
-      content: story,
-      schema: creativeWorkSchema,
-      showFooter: false
+      title:
+        `${work.titulo} — Luciano Jr Amorim`,
+
+      description:
+        work.sinopse,
+
+      route:
+        `/textos/${work.slug}/`,
+
+      current:
+        'textos',
+
+      content:
+        story,
+
+      schema:
+        creativeWorkSchema,
+
+      showFooter:
+        false
     })
   );
 }
 
+/*
+ * SITEMAP E ARQUIVOS DE PUBLICAÇÃO
+ */
+
 const routes = [
   '/',
   '/textos/',
+
   ...works.map(
-    (work) => `/textos/${work.slug}/`
+    (work) =>
+      `/textos/${work.slug}/`
   ),
+
   '/autor/',
   '/contato/'
 ];
 
 await writeFile(
-  path.join(dist, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${routes
-    .map(
-      (route) =>
-        `<url><loc>${domain}${route}</loc></url>`
-    )
-    .join('')}</urlset>\n`,
+  path.join(
+    dist,
+    'sitemap.xml'
+  ),
+
+  `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">` +
+    routes
+      .map(
+        (route) =>
+          `<url><loc>${domain}${route}</loc></url>`
+      )
+      .join('') +
+    `</urlset>\n`,
+
   'utf8'
 );
 
 await writeFile(
-  path.join(dist, 'robots.txt'),
-  `User-agent: *\nAllow: /\nSitemap: ${domain}/sitemap.xml\n`,
+  path.join(
+    dist,
+    'robots.txt'
+  ),
+
+  `User-agent: *\n` +
+    `Allow: /\n` +
+    `Sitemap: ${domain}/sitemap.xml\n`,
+
   'utf8'
 );
 
 await writeFile(
-  path.join(dist, 'CNAME'),
+  path.join(
+    dist,
+    'CNAME'
+  ),
+
   'lucianojramorim.com.br\n',
+
   'utf8'
 );
 
 await writeFile(
-  path.join(dist, '.nojekyll'),
+  path.join(
+    dist,
+    '.nojekyll'
+  ),
+
   '',
+
   'utf8'
 );
 
 console.log(
-  `Site gerado em dist/ com ${routes.length} páginas — ${isProduction ? 'produção' : 'preview'}.`
+  `Site gerado em dist/ com ${routes.length} páginas — ${
+    isProduction
+      ? 'produção'
+      : 'preview'
+  }.`
 );

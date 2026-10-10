@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
+    "build:prod": "node scripts/build.mjs --prod",
     "serve": "node scripts/serve.mjs"
   }
 }

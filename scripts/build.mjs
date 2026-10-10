@@ -278,25 +278,13 @@ const homeSlots = [
 
 const homeItems = homeSlots
   .map(
-    (work, index) => {
-      const number =
-        work?.numero ??
-        String(index + 1)
-          .padStart(
-            2,
-            '0'
-          );
-
+    (work) => {
       if (!work) {
         return `<li
           class="home-work home-work--future"
-          aria-label="Slot ${number} reservado para texto futuro"
+          aria-label="Espaço reservado para texto futuro"
         >
-          <div class="home-work-placeholder">
-            <span class="home-work-number">
-              ${number}
-            </span>
-          </div>
+          <div class="home-work-placeholder"></div>
         </li>`;
       }
 
@@ -323,10 +311,6 @@ const homeItems = homeSlots
           data-home-work
         >
           ${media}
-
-          <span class="home-work-number">
-            ${number}
-          </span>
 
           <span class="home-work-composition">
             <span class="home-work-title">

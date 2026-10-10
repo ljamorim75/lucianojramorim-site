@@ -28,18 +28,31 @@ jobs:
         run: |
           node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
-          import { existsSync, readFileSync } from 'node:fs';
+          import { existsSync, readFileSync, readdirSync } from 'node:fs';
+          import path from 'node:path';
 
-          for (const page of ['index.html', 'textos/index.html', 'autor/index.html', 'contato/index.html']) {
-            assert(existsSync(`dist/${page}`), `Missing page: ${page}`);
+          for (const file of ['index.html', 'textos/index.html', 'autor/index.html', 'contato/index.html', 'robots.txt', 'sitemap.xml', 'CNAME']) {
+            assert(existsSync(`dist/${file}`), `Missing output: ${file}`);
           }
-
+          assert.equal(readFileSync('dist/CNAME', 'utf8').trim(), 'lucianojramorim.com.br');
           const works = JSON.parse(readFileSync('src/data/textos.json', 'utf8'));
-          const monaksia = works.find((work) => work.slug === 'monaksia');
-          assert(monaksia, 'Monaksía is missing from the catalog');
-
-          if (monaksia.status === 'preparacao') {
-            assert(!existsSync('dist/textos/monaksia/index.html'), 'Draft page exposed');
-            assert(!readFileSync('dist/sitemap.xml', 'utf8').includes('/textos/monaksia/'), 'Draft route exposed in sitemap');
+          assert.equal(works.find((work) => work.slug === 'monaksia')?.status, 'em_breve');
+          assert(!existsSync('dist/textos/monaksia/index.html'), 'Draft page exposed');
+          assert(!readFileSync('dist/sitemap.xml', 'utf8').includes('/textos/monaksia/'), 'Draft route exposed');
+          for (const file of ['dist/index.html', 'dist/textos/index.html']) {
+            const html = readFileSync(file, 'utf8');
+            assert(html.includes('MONAKSÍA') && /EM BREVE/iu.test(html), `Upcoming metadata missing: ${file}`);
+            assert(!/href\s*=\s*["'][^"']*\/textos\/monaksia\/?["']/iu.test(html), `Draft link exposed: ${file}`);
           }
+          function validatePages(directory) {
+            for (const entry of readdirSync(directory, { withFileTypes: true })) {
+              const file = path.join(directory, entry.name);
+              if (entry.isDirectory()) {
+                validatePages(file);
+              } else if (entry.name.endsWith('.html')) {
+                assert(!/manuscript-placeholder|manuscript-status|Publicação em preparação|data-reading-content|story-paragraph/iu.test(readFileSync(file, 'utf8')), `Private content or marker in ${file}`);
+              }
+            }
+          }
+          validatePages('dist');
           NODE

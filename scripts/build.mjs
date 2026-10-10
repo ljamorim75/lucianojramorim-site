@@ -15,11 +15,15 @@ const allWorks = JSON.parse(
   )
 );
 
-const works = isProduction
+const visibleWorks = isProduction
   ? allWorks.filter(
-      (work) => work.status === 'publicado'
+      (work) => work.status === 'em_breve' || work.status === 'publicado'
     )
   : allWorks;
+
+const pageWorks = isProduction
+  ? allWorks.filter((work) => work.status === 'publicado')
+  : allWorks.filter((work) => existsSync(path.join(src, 'content', 'textos', work.arquivoConteudo)));
 
 await rm(
   dist,
@@ -254,16 +258,16 @@ const personSchema =
  * como espaços reservados para textos futuros.
  */
 
-const visibleWorks =
-  works.slice(0, 6);
+const homeWorks =
+  visibleWorks.slice(0, 6);
 
 const homeSlots = [
-  ...visibleWorks,
+  ...homeWorks,
 
   ...Array(
     Math.max(
       0,
-      6 - visibleWorks.length
+      6 - homeWorks.length
     )
   ).fill(null)
 ];
@@ -305,10 +309,13 @@ const homeItems = homeSlots
             </span>`
           : '';
 
+      const isUpcoming = isProduction && work.status === 'em_breve';
+      const tag = isUpcoming ? 'button' : 'a';
+
       return `<li class="home-work home-work--available">
-        <a
+        <${tag}
           class="home-work-link"
-          href="/textos/${work.slug}/"
+          ${isUpcoming ? `type="button" aria-label="${work.titulo} — em breve"` : `href="/textos/${work.slug}/"`}
           data-home-work
         >
           ${media}
@@ -332,11 +339,11 @@ const homeItems = homeSlots
               </span>
 
               <span class="home-work-action">
-                Ler ${work.titulo}
+                ${isUpcoming ? 'EM BREVE' : `Ler ${work.titulo}`}
               </span>
             </span>
           </span>
-        </a>
+        </${tag}>
       </li>`;
     }
   )
@@ -376,29 +383,34 @@ await writePage(
  * CATÁLOGO
  */
 
-const catalogue = works
+const catalogue = visibleWorks
   .map(
-    (work) =>
-      `<a
+    (work) => {
+      const isUpcoming = isProduction && work.status === 'em_breve';
+      const tag = isUpcoming ? 'article' : 'a';
+      return `<${tag}
         class="catalogue-item"
-        href="/textos/${work.slug}/"
+        ${isUpcoming ? '' : `href="/textos/${work.slug}/"`}
       >
         <span class="catalogue-number">
           ${work.numero}
         </span>
 
         <div>
+          ${work.imagem ? `<img class="catalogue-image" src="${work.imagem}" alt="" loading="lazy">` : ''}
           <h2>${work.titulo}</h2>
 
           <span class="catalogue-meta">
             ${work.tipo} · ${work.genero}
           </span>
+          ${isUpcoming ? '<span class="catalogue-status">EM BREVE</span>' : ''}
         </div>
 
         <p>
           ${work.sinopse}
         </p>
-      </a>`
+      </${tag}>`;
+    }
   )
   .join('');
 
@@ -542,7 +554,7 @@ await writePage(
  * PÁGINAS INDIVIDUAIS DAS OBRAS
  */
 
-for (const work of works) {
+for (const work of pageWorks) {
   const manuscript =
     await readFile(
       path.join(
@@ -720,7 +732,7 @@ const routes = [
 
   '/textos/',
 
-  ...works.map(
+  ...pageWorks.map(
     (work) =>
       `/textos/${work.slug}/`
   ),

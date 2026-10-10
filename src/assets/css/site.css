@@ -735,6 +735,33 @@ h3 {
   isolation: isolate;
 }
 
+button.home-work-link {
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.catalogue-status {
+  display: block;
+  margin-top: .75rem;
+  color: var(--muted);
+  font-size: .75rem;
+  letter-spacing: .14em;
+}
+
+.catalogue-image {
+  display: block;
+  width: 100%;
+  max-width: 12rem;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
 .home-work-media {
   position: absolute;
   z-index: -1;

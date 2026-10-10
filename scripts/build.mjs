@@ -9,29 +9,53 @@ const domain = 'https://lucianojramorim.com.br';
 const isProduction = process.argv.includes('--prod');
 
 const allWorks = JSON.parse(
-  await readFile(path.join(src, 'data', 'textos.json'), 'utf8')
+  await readFile(
+    path.join(src, 'data', 'textos.json'),
+    'utf8'
+  )
 );
 
 const works = isProduction
-  ? allWorks.filter((work) => work.status === 'publicado')
+  ? allWorks.filter(
+      (work) => work.status === 'publicado'
+    )
   : allWorks;
 
-await rm(dist, { recursive: true, force: true });
-await mkdir(dist, { recursive: true });
+await rm(
+  dist,
+  {
+    recursive: true,
+    force: true
+  }
+);
+
+await mkdir(
+  dist,
+  {
+    recursive: true
+  }
+);
 
 await cp(
   path.join(src, 'assets'),
   path.join(dist, 'assets'),
-  { recursive: true }
+  {
+    recursive: true
+  }
 );
 
 const hasEmblem = existsSync(
-  path.join(src, 'assets', 'img', 'lja-emblema.png')
+  path.join(
+    src,
+    'assets',
+    'img',
+    'lja-emblema.png'
+  )
 );
 
 const emblem = (className = 'brand-mark') =>
   hasEmblem
-    ? `<img class="${className}" src="/assets/img/lja-emblema.png" alt="Emblema LJA" width="1280" height="1280">`
+    ? `<img class="${className}" src="/assets/img/lja-emblema.png" alt="Emblema LJA" width="320" height="320">`
     : `<span class="${
         className === 'hero-mark'
           ? 'hero-placeholder'
@@ -61,7 +85,9 @@ function layout({
     .map(
       ([key, href, label]) =>
         `<a href="${href}"${
-          current === key ? ' aria-current="page"' : ''
+          current === key
+            ? ' aria-current="page"'
+            : ''
         }>${label}</a>`
     )
     .join('');
@@ -114,7 +140,9 @@ function layout({
 </head>
 
 <body${isHome ? ' class="home-page"' : ''}>
-  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <a class="skip-link" href="#conteudo">
+    Pular para o conteúdo
+  </a>
 
   <header class="site-header">
     <div class="shell header-inner">
@@ -163,10 +191,18 @@ async function writePage(route, html) {
       ? dist
       : path.join(dist, route);
 
-  await mkdir(target, { recursive: true });
+  await mkdir(
+    target,
+    {
+      recursive: true
+    }
+  );
 
   await writeFile(
-    path.join(target, 'index.html'),
+    path.join(
+      target,
+      'index.html'
+    ),
     html,
     'utf8'
   );
@@ -188,78 +224,92 @@ const personSchema =
  * como espaços reservados para textos futuros.
  */
 
-const visibleWorks = works.slice(0, 6);
+const visibleWorks =
+  works.slice(0, 6);
 
 const homeSlots = [
   ...visibleWorks,
+
   ...Array(
-    Math.max(0, 6 - visibleWorks.length)
+    Math.max(
+      0,
+      6 - visibleWorks.length
+    )
   ).fill(null)
 ];
 
 const homeItems = homeSlots
-  .map((work, index) => {
-    const number =
-      work?.numero ??
-      String(index + 1).padStart(2, '0');
+  .map(
+    (work, index) => {
+      const number =
+        work?.numero ??
+        String(index + 1)
+          .padStart(
+            2,
+            '0'
+          );
 
-    if (!work) {
-      return `<li
-        class="home-work home-work--future"
-        aria-label="Slot ${number} reservado para texto futuro"
-      >
-        <div class="home-work-placeholder">
-          <span class="home-work-number">${number}</span>
-        </div>
+      if (!work) {
+        return `<li
+          class="home-work home-work--future"
+          aria-label="Slot ${number} reservado para texto futuro"
+        >
+          <div class="home-work-placeholder">
+            <span class="home-work-number">
+              ${number}
+            </span>
+          </div>
+        </li>`;
+      }
+
+      const media =
+        work.imagem
+          ? `<span
+              class="home-work-media"
+              aria-hidden="true"
+            >
+              <img
+                src="${work.imagem}"
+                alt=""
+              >
+            </span>`
+          : '';
+
+      return `<li class="home-work home-work--available">
+        <a
+          class="home-work-link"
+          href="/textos/${work.slug}/"
+          data-home-work
+        >
+          ${media}
+
+          <span class="home-work-number">
+            ${number}
+          </span>
+
+          <span class="home-work-composition">
+            <span class="home-work-title">
+              ${work.titulo}
+            </span>
+
+            <span class="home-work-details">
+              <span class="home-work-meta">
+                ${work.tipo} · ${work.genero}
+              </span>
+
+              <span class="home-work-synopsis">
+                ${work.sinopse}
+              </span>
+
+              <span class="home-work-action">
+                Ler ${work.titulo}
+              </span>
+            </span>
+          </span>
+        </a>
       </li>`;
     }
-
-    const media = work.imagem
-      ? `<span
-          class="home-work-media"
-          aria-hidden="true"
-        >
-          <img
-            src="${work.imagem}"
-            alt=""
-          >
-        </span>`
-      : '';
-
-    return `<li class="home-work home-work--available">
-      <a
-        class="home-work-link"
-        href="/textos/${work.slug}/"
-        data-home-work
-      >
-        ${media}
-
-        <span class="home-work-number">
-          ${number}
-        </span>
-
-        <span class="home-work-composition">
-          <span class="home-work-title">
-            ${work.titulo}
-          </span>
-
-          <span class="home-work-details">
-            <span class="home-work-meta">
-              ${work.tipo} · ${work.genero}
-            </span>
-
-            <span class="home-work-synopsis">
-              ${work.sinopse}
-            </span>
-
-            <span class="home-work-action">
-              Ler ${work.titulo}
-            </span>
-          </span>
-        </span>
-      </a>
-    </li>`;
-  })
+  )
   .join('');
 
 const home =
@@ -311,7 +361,9 @@ const catalogue = works
           </span>
         </div>
 
-        <p>${work.sinopse}</p>
+        <p>
+          ${work.sinopse}
+        </p>
       </a>`
   )
   .join('');
@@ -400,7 +452,8 @@ await writePage(
         </div>
       </header>`,
 
-    schema: personSchema
+    schema:
+      personSchema
   })
 );
 
@@ -428,7 +481,9 @@ await writePage(
               Contato
             </p>
 
-            <h1>Contato</h1>
+            <h1>
+              Contato
+            </h1>
           </div>
 
           <div class="section-copy">
@@ -454,32 +509,41 @@ await writePage(
  */
 
 for (const work of works) {
-  const manuscript = await readFile(
-    path.join(
-      src,
-      'content',
-      'textos',
-      work.arquivoConteudo
-    ),
-    'utf8'
-  );
+  const manuscript =
+    await readFile(
+      path.join(
+        src,
+        'content',
+        'textos',
+        work.arquivoConteudo
+      ),
+      'utf8'
+    );
 
   const creativeWorkSchema =
     `<script type="application/ld+json">${JSON.stringify({
-      '@context': 'https://schema.org',
+      '@context':
+        'https://schema.org',
 
-      '@type': 'ShortStory',
+      '@type':
+        'ShortStory',
 
-      name: work.titulo,
+      name:
+        work.titulo,
 
       author: {
-        '@type': 'Person',
-        name: 'Luciano Jr Amorim'
+        '@type':
+          'Person',
+
+        name:
+          'Luciano Jr Amorim'
       },
 
-      genre: work.genero,
+      genre:
+        work.genero,
 
-      description: work.sinopse,
+      description:
+        work.sinopse,
 
       url:
         `${domain}/textos/${work.slug}/`
@@ -489,7 +553,9 @@ for (const work of works) {
     work.tempoLeitura &&
     work.tempoLeitura
       .trim()
-      .toLocaleLowerCase('pt-BR') !== 'a definir'
+      .toLocaleLowerCase(
+        'pt-BR'
+      ) !== 'a definir'
       ? `<span>${work.tempoLeitura} de leitura</span>`
       : '';
 
@@ -506,7 +572,9 @@ for (const work of works) {
           ${work.tipo} · ${work.genero}
         </p>
 
-        <h1>${work.titulo}</h1>
+        <h1>
+          ${work.titulo}
+        </h1>
 
         <p class="story-byline">
           um conto de Luciano Jr Amorim
@@ -526,7 +594,9 @@ for (const work of works) {
       class="reading-toolbar"
       aria-label="Tamanho do texto"
     >
-      <span>Texto</span>
+      <span>
+        Texto
+      </span>
 
       <button
         type="button"
@@ -556,7 +626,9 @@ for (const work of works) {
     </article>` +
 
     `<footer class="story-end">
-      <p>${work.titulo}</p>
+      <p>
+        ${work.titulo}
+      </p>
 
       <p>
         Luciano Jr Amorim
@@ -605,6 +677,7 @@ for (const work of works) {
 
 const routes = [
   '/',
+
   '/textos/',
 
   ...works.map(
@@ -613,6 +686,7 @@ const routes = [
   ),
 
   '/autor/',
+
   '/contato/'
 ];
 

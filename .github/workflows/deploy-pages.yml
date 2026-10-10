@@ -17,7 +17,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          ref: site-v2
           persist-credentials: false
       - name: Setup Node.js LTS
         uses: actions/setup-node@v7

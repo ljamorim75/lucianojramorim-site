@@ -1,0 +1,16 @@
+[
+  {
+    "numero": "01",
+    "titulo": "MONAKSÍA",
+    "slug": "monaksia",
+    "tipo": "Conto",
+    "genero": "Ficção científica",
+    "sinopse": "Duzentos e setenta dias sozinho em uma estação orbital. Um homem, uma inteligência artificial e uma Terra cada vez mais distante.",
+    "status": "em_breve",
+    "dataPublicacao": "",
+    "tempoLeitura": "A definir",
+    "arquivoConteudo": "monaksia.html",
+    "imagem": "/assets/img/monaksia-estacao-orbital.jpg",
+    "imagemSocial": "/assets/img/og-monaksia.png"
+  }
+]

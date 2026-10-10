@@ -77,7 +77,7 @@ function layout({
   content,
   schema = '',
   showFooter = true,
-  socialImage = '',
+  socialImage = '/assets/img/og-site.png',
   socialImageAlt = ''
 }) {
   const canonical = `${domain}${route}`;
@@ -703,7 +703,7 @@ for (const work of works) {
         false,
 
       socialImage:
-        work.imagemSocial || '',
+        work.imagemSocial || '/assets/img/og-site.png',
 
       socialImageAlt:
         `${work.titulo} \u2014 um conto de Luciano Jr Amorim`

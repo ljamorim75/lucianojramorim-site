@@ -57,3 +57,7 @@ O domínio configurado é `lucianojramorim.com.br`. O gerador cria `CNAME`, `.no
 O workflow `.github/workflows/production-build-check.yml` valida o build de produção em pushes para `site-v2` e pull requests direcionados a `main`. Não instala dependências, não envia artefatos e não faz deployment.
 
 **A PRODUÇÃO AINDA NÃO FOI MIGRADA.** GitHub Pages ainda utiliza a raiz de `main` e o site antigo. A mudança para publicação por GitHub Actions será realizada em uma etapa posterior e controlada; este workflow apenas verifica o build.
+
+O workflow `.github/workflows/deploy-pages.yml` prepara o deployment real, com gatilho exclusivamente manual (`workflow_dispatch`), build de produção e validações antes do upload. Ele ainda não é a fonte ativa do Pages e não foi executado. A ativação do Pages por Actions será feita em uma fase posterior; a produção atual continua em `main`.
+
+Nunca execute deployment sem revisar o build de produção. Nesta fase, o workflow bloqueia qualquer página de Monaksía ou marcador editorial na saída e verifica o domínio antes do upload.

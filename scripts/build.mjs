@@ -76,10 +76,18 @@ function layout({
   current,
   content,
   schema = '',
-  showFooter = true
+  showFooter = true,
+  socialImage = '',
+  socialImageAlt = ''
 }) {
   const canonical = `${domain}${route}`;
   const isHome = current === 'inicio';
+
+  const socialImageUrl = socialImage
+    ? `${domain}${socialImage.startsWith('/') ? '' : '/'}${socialImage}`
+    : '';
+
+  const socialAlt = socialImageAlt || title;
 
   const nav = navItems
     .map(
@@ -144,9 +152,17 @@ function layout({
   <meta property="og:description" content="${description}">
   <meta property="og:url" content="${canonical}">
 
-  <meta name="twitter:card" content="summary">
+  ${socialImageUrl ? `<meta property="og:image" content="${socialImageUrl}">
+  <meta property="og:image:alt" content="${socialAlt}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">` : ''}
+
+  <meta name="twitter:card" content="${socialImageUrl ? 'summary_large_image' : 'summary'}">
   <meta name="twitter:title" content="${title}">
   <meta name="twitter:description" content="${description}">
+
+  ${socialImageUrl ? `<meta name="twitter:image" content="${socialImageUrl}">
+  <meta name="twitter:image:alt" content="${socialAlt}">` : ''}
 
   <link rel="stylesheet" href="/assets/css/site.css">
 
@@ -684,7 +700,13 @@ for (const work of works) {
         creativeWorkSchema,
 
       showFooter:
-        false
+        false,
+
+      socialImage:
+        work.imagemSocial || '',
+
+      socialImageAlt:
+        `${work.titulo} \u2014 um conto de Luciano Jr Amorim`
     })
   );
 }

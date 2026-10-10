@@ -1,69 +1,47 @@
-# Luciano Jr Amorim — site autoral
+# Luciano Jr Amorim — Site autoral
 
-Site estático de Luciano Jr Amorim, organizado como uma biblioteca de ficção especulativa. A pasta `dist/` é o conteúdo pronto para publicação.
+Site estático autoral destinado à publicação de ficção especulativa.
 
-## Estrutura
+## Arquitetura
 
-- `src/data/textos.json`: catálogo e metadados das obras.
-- `src/content/textos/`: manuscritos em HTML semântico.
-- `src/assets/`: estilos, scripts e imagens.
-- `scripts/build.mjs`: gerador estático sem dependências externas.
-- `dist/`: site final gerado para o GitHub Pages.
+```text
+src/
+  assets/
+  content/
+  data/
+scripts/
+dist/
+```
+
+- `src/`: fonte do site.
+- `src/data/textos.json`: catálogo e metadados das obras. Atualmente contém somente MONAKSÍA, em preparação.
+- `src/content/textos/`: conteúdo HTML das obras. O manuscrito de Monaksía deve ser preservado sem alterações automáticas.
+- `src/assets/`: CSS, JavaScript e imagens da identidade visual.
+- `scripts/build.mjs`: gerador principal; contém os templates das páginas e as regras de publicação.
+- `dist/`: saída gerada automaticamente. Não deve ser editada manualmente; cada build apaga e recria essa pasta.
 
 ## Executar localmente
 
-Ambiente preparado com Node.js 24.21.0 LTS e npm 11.19.0.
+É necessário ter Node.js e npm disponíveis.
 
 ```bash
 npm run build
 npm run serve
 ```
 
-No Windows sem Node.js, use o gerador equivalente em PowerShell:
+`npm run build` gera o preview local, incluindo obras ainda em preparação.
+`npm run serve` serve a pasta `dist/` em `http://localhost:4173/`.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts/build.ps1
-powershell -ExecutionPolicy Bypass -File scripts/serve.ps1
+## Build de produção
+
+```bash
+npm run build:prod
 ```
 
-Também é possível abrir `dist/index.html` diretamente, mas um servidor local representa melhor o comportamento publicado.
+Inclui somente obras com `status === "publicado"` no catálogo, nas páginas individuais, na Home e no sitemap. Os ativos de `src/assets/` são copiados integralmente em ambos os modos.
 
-## Publicar no GitHub Pages
+**ALERTA: NUNCA publicar diretamente uma saída gerada por `npm run build` se houver textos em preparação. Para publicação deve ser utilizado o build de produção.**
 
-1. Execute `npm run build`.
-2. Publique o conteúdo da pasta `dist/` na branch configurada no GitHub Pages.
-3. Configure o domínio personalizado `lucianojramorim.com.br` no repositório. O arquivo `CNAME` já é gerado.
+MONAKSÍA permanece excluída das páginas de produção enquanto seu status for `preparacao`.
 
-O site final é totalmente estático e não exige Node.js no servidor.
-
-## Inserir ou trocar o emblema
-
-1. Preserve o arquivo original.
-2. Crie uma cópia otimizada em PNG, preferencialmente quadrada e com até 1200 px.
-3. Salve a cópia em `src/assets/img/emblema-metalico-lja-com-estrela.png`.
-4. Execute `npm run build`.
-
-Enquanto a imagem não existir, o site mostra um espaço tipográfico neutro identificado como provisório.
-
-## Alterar textos da página inicial
-
-Edite as seções correspondentes no arquivo `scripts/build.mjs`. Título, tipo, gênero e sinopse da obra em destaque vêm de `src/data/textos.json`.
-
-## Inserir o manuscrito de Monaksía
-
-Substitua o marcador em `src/content/textos/monaksia.html` pelo texto final, usando:
-
-- `<p>` para parágrafos;
-- `<h2>` para títulos de dias ou seções;
-- `<hr>` para separadores narrativos;
-- `<em>` para ênfase.
-
-Depois, ajuste `tempoLeitura`, `status` e `dataPublicacao` em `src/data/textos.json` e execute `npm run build`.
-
-## Adicionar um novo conto
-
-1. Adicione um novo objeto em `src/data/textos.json`, copiando a estrutura de Monaksía e atualizando todos os campos.
-2. Crie o arquivo indicado em `arquivoConteudo` dentro de `src/content/textos/`.
-3. Execute `npm run build`.
-
-O catálogo, a página individual, os metadados e o sitemap serão gerados automaticamente.
+O domínio configurado é `lucianojramorim.com.br`. O gerador cria `CNAME`, `.nojekyll`, `robots.txt` e `sitemap.xml` em `dist/`.

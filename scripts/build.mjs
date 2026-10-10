@@ -82,7 +82,10 @@ function layout({
   schema = '',
   showFooter = true,
   socialImage = '/assets/img/og-site.png',
-  socialImageAlt = ''
+  socialImageAlt = '',
+  canonical: includeCanonical = true,
+  robots = '',
+  social = true
 }) {
   const canonical = `${domain}${route}`;
   const isHome = current === 'inicio';
@@ -133,7 +136,8 @@ function layout({
   <meta name="description" content="${description}">
   <meta name="theme-color" content="#070708">
 
-  <link rel="canonical" href="${canonical}">
+  ${includeCanonical ? `<link rel="canonical" href="${canonical}">` : ''}
+  ${robots ? `<meta name="robots" content="${robots}">` : ''}
 
   <link
     rel="icon"
@@ -149,7 +153,7 @@ function layout({
     href="/assets/img/favicon-lja-16.png"
   >
 
-  <meta property="og:type" content="website">
+  ${social ? `<meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="Luciano Jr Amorim">
   <meta property="og:title" content="${title}">
@@ -166,7 +170,7 @@ function layout({
   <meta name="twitter:description" content="${description}">
 
   ${socialImageUrl ? `<meta name="twitter:image" content="${socialImageUrl}">
-  <meta name="twitter:image:alt" content="${socialAlt}">` : ''}
+  <meta name="twitter:image:alt" content="${socialAlt}">` : ''}` : ''}
 
   <link rel="stylesheet" href="/assets/css/site.css">
 
@@ -726,6 +730,35 @@ for (const work of pageWorks) {
 /*
  * SITEMAP E ARQUIVOS DE PUBLICAÇÃO
  */
+
+await writeFile(
+  path.join(dist, '404.html'),
+  layout({
+    title: 'Página não encontrada — Luciano Jr Amorim',
+    description: 'A página solicitada não foi encontrada no site de Luciano Jr Amorim.',
+    route: '/404.html',
+    current: '',
+    canonical: false,
+    robots: 'noindex, follow',
+    social: false,
+    socialImage: '',
+    content: `<section class="not-found" aria-labelledby="not-found-title">
+      <div class="shell not-found-inner">
+        <div class="not-found-code" aria-hidden="true">404</div>
+        <div class="not-found-copy">
+          <p class="eyebrow">Página não encontrada</p>
+          <h1 id="not-found-title">Esta página não está aqui.</h1>
+          <p class="lede">O endereço pode ter mudado ou não existir.</p>
+          <div class="actions not-found-actions">
+            <a class="button" href="/">Voltar ao início</a>
+            <a class="button button-secondary" href="/textos/">Ver textos</a>
+          </div>
+        </div>
+      </div>
+    </section>`
+  }),
+  'utf8'
+);
 
 const routes = [
   '/',

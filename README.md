@@ -58,6 +58,8 @@ MONAKSÍA é divulgada como `em_breve`, sem publicação do manuscrito ou da pá
 
 O domínio configurado é `lucianojramorim.com.br`. O gerador cria `CNAME`, `.nojekyll`, `robots.txt` e `sitemap.xml` em `dist/`.
 
+O build também gera `dist/404.html`, usada pelo GitHub Pages e pelo servidor `npm run serve` em rotas inexistentes, com status HTTP 404. Essa página não entra no sitemap.
+
 ## Validação e Publicação
 
 O workflow `.github/workflows/production-build-check.yml` valida o build de produção em pushes para `main` e pull requests direcionados a `main`. Não instala dependências, não envia artefatos e não faz deployment.

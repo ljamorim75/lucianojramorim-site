@@ -63,6 +63,13 @@ createServer((request, response) => {
     !existsSync(filePath) ||
     !statSync(filePath).isFile()
   ) {
+    const notFoundPage = path.join(webRoot, '404.html');
+    if (existsSync(notFoundPage) && statSync(notFoundPage).isFile()) {
+      response.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+      createReadStream(notFoundPage).pipe(response);
+      return;
+    }
+
     response
       .writeHead(
         404,

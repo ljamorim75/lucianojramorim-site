@@ -753,6 +753,44 @@ button.home-work-link {
   letter-spacing: .14em;
 }
 
+.not-found {
+  padding-block: clamp(4rem, 10vw, 8rem);
+}
+
+.not-found-inner {
+  min-height: 55vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+.not-found-code {
+  color: #45464c;
+  font: 400 clamp(6rem, 18vw, 16rem)/1 var(--serif);
+  letter-spacing: -.06em;
+}
+
+.not-found-copy h1 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.1;
+}
+
+.not-found-actions {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 47.99rem) {
+  .not-found-inner {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: auto;
+  }
+
+  .not-found-actions .button {
+    min-height: 3rem;
+  }
+}
+
 .catalogue-image {
   display: block;
   width: 100%;

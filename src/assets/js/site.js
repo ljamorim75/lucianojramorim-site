@@ -16,6 +16,20 @@ if (menuButton && menu) {
   });
 }
 
+const homeWorkLink = document.querySelector('[data-home-work]');
+
+if (homeWorkLink) {
+  homeWorkLink.addEventListener('click', (event) => {
+    const isMobile = window.matchMedia('(max-width: 47.99rem)').matches;
+    const work = homeWorkLink.closest('.home-work--available');
+
+    if (isMobile && work && !work.classList.contains('is-open')) {
+      event.preventDefault();
+      work.classList.add('is-open');
+    }
+  });
+}
+
 const progress = document.querySelector('[data-reading-progress]');
 const readingContent = document.querySelector('[data-reading-content]');
 

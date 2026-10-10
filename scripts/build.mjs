@@ -123,6 +123,20 @@ function layout({
 
   <link rel="canonical" href="${canonical}">
 
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="/assets/img/favicon-lja-32.png"
+  >
+
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="/assets/img/favicon-lja-16.png"
+  >
+
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="Luciano Jr Amorim">
@@ -313,7 +327,11 @@ const homeItems = homeSlots
   .join('');
 
 const home =
-  `<nav
+  `<h1 class="visually-hidden">
+    Luciano Jr Amorim — ficção especulativa
+  </h1>
+
+  <nav
     class="home-library-nav"
     aria-label="Biblioteca de textos"
   >

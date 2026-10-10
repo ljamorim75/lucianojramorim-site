@@ -1,0 +1,45 @@
+name: Production Build Check
+
+on:
+  push:
+    branches: [site-v2]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  production-build-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v7
+        with:
+          node-version: 'lts/*'
+          package-manager-cache: false
+      - name: Build Production
+        run: npm run build:prod
+      - name: Validate Production Output
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { existsSync, readFileSync } from 'node:fs';
+
+          for (const page of ['index.html', 'textos/index.html', 'autor/index.html', 'contato/index.html']) {
+            assert(existsSync(`dist/${page}`), `Missing page: ${page}`);
+          }
+
+          const works = JSON.parse(readFileSync('src/data/textos.json', 'utf8'));
+          const monaksia = works.find((work) => work.slug === 'monaksia');
+          assert(monaksia, 'Monaksía is missing from the catalog');
+
+          if (monaksia.status === 'preparacao') {
+            assert(!existsSync('dist/textos/monaksia/index.html'), 'Draft page exposed');
+            assert(!readFileSync('dist/sitemap.xml', 'utf8').includes('/textos/monaksia/'), 'Draft route exposed in sitemap');
+          }
+          NODE

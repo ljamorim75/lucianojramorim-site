@@ -10,3 +10,5 @@ Desktop.ini
 *.log
 *.tmp
 .cache/
+/dist/
+/src/content/textos/monaksia.html

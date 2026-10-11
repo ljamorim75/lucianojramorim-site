@@ -51,16 +51,25 @@ const homeWorkLinks =
   document.querySelectorAll('[data-home-work]');
 
 homeWorkLinks.forEach((homeWorkLink) => {
-  homeWorkLink.addEventListener('click', (event) => {
-    const isMobile =
-      window.matchMedia(
-        '(max-width: 47.99rem)'
-      ).matches;
+  const mobileViewport = window.matchMedia('(max-width: 47.99rem)');
+  const work = homeWorkLink.closest('.home-work--available');
 
-    const work =
-      homeWorkLink.closest(
-        '.home-work--available'
-      );
+  function updateExpandedState() {
+    if (!homeWorkLink.hasAttribute('aria-expanded')) return;
+
+    const isExpanded = document.activeElement === homeWorkLink ||
+      (mobileViewport.matches && work?.classList.contains('is-open'));
+    homeWorkLink.setAttribute('aria-expanded', String(Boolean(isExpanded)));
+  }
+
+  if (homeWorkLink.hasAttribute('aria-expanded')) {
+    homeWorkLink.addEventListener('focus', updateExpandedState);
+    homeWorkLink.addEventListener('blur', updateExpandedState);
+    mobileViewport.addEventListener('change', updateExpandedState);
+  }
+
+  homeWorkLink.addEventListener('click', (event) => {
+    const isMobile = mobileViewport.matches;
 
     if (
       isMobile &&
@@ -69,6 +78,7 @@ homeWorkLinks.forEach((homeWorkLink) => {
     ) {
       event.preventDefault();
       work.classList.add('is-open');
+      updateExpandedState();
     }
   });
 });

@@ -307,7 +307,7 @@ const homeItems = homeSlots
       return `<li class="home-work home-work--available">
         <${tag}
           class="home-work-link"
-          ${isUpcoming ? `type="button" aria-label="${work.titulo} — em breve"` : `href="/textos/${work.slug}/"`}
+          ${isUpcoming ? `type="button" aria-label="${work.titulo} — em breve" aria-expanded="false" aria-controls="${work.slug}-details"` : `href="/textos/${work.slug}/"`}
           data-home-work
         >
           ${media}
@@ -317,7 +317,7 @@ const homeItems = homeSlots
               ${work.titulo}
             </span>
 
-            <span class="home-work-details">
+            <span class="home-work-details"${isUpcoming ? ` id="${work.slug}-details"` : ''}>
               <span class="home-work-meta">
                 ${work.tipo} · ${work.genero}
               </span>

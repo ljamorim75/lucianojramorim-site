@@ -258,36 +258,21 @@ const personSchema =
 /*
  * HOME
  *
- * Exibe até seis obras.
- * Os slots restantes são preenchidos automaticamente
- * como espaços reservados para textos futuros.
+ * A configuração editorial da estante é independente da publicação.
  */
 
-const homeWorks =
-  visibleWorks.slice(0, 6);
-
-const homeSlots = [
-  ...homeWorks,
-
-  ...Array(
-    Math.max(
-      0,
-      6 - homeWorks.length
-    )
-  ).fill(null)
-];
+const shelf = JSON.parse(await readFile(path.join(src, 'data', 'home-shelf.json'), 'utf8'));
+const homeSlots = shelf.map((spine) => {
+  const work = visibleWorks.find((item) => item.slug === spine.slug);
+  return work
+    ? { ...work, ...spine }
+    : { ...spine, status: 'em_breve', homePlaceholder: true };
+});
 
 const homeItems = homeSlots
   .map(
     (work) => {
-      if (!work) {
-        return `<li
-          class="home-work home-work--future"
-          aria-label="Espaço reservado para texto futuro"
-        >
-          <div class="home-work-placeholder"></div>
-        </li>`;
-      }
+      const universeLines = work.universo;
 
       const media =
         work.imagem
@@ -302,10 +287,10 @@ const homeItems = homeSlots
             </span>`
           : '';
 
-      const isUpcoming = work.status === 'em_breve' && (isProduction || !pageWorks.includes(work));
+      const isUpcoming = work.homePlaceholder || (work.status === 'em_breve' && (isProduction || !pageWorks.includes(work)));
       const tag = isUpcoming ? 'button' : 'a';
 
-      return `<li class="home-work home-work--available">
+      return `<li class="home-work home-work--available${work.homePlaceholder ? ' home-work--future' : ''}">
         <${tag}
           class="home-work-link"
           ${isUpcoming ? `type="button" aria-label="${work.titulo} — em breve" aria-expanded="false" aria-controls="${work.slug}-details"` : `href="/textos/${work.slug}/"`}
@@ -319,18 +304,25 @@ const homeItems = homeSlots
             </span>
 
             <span class="home-work-details"${isUpcoming ? ` id="${work.slug}-details"` : ''}>
-              <span class="home-work-meta">
+              ${isUpcoming ? `<span class="home-work-announcement-title">${work.titulo}</span>
+              <span class="home-work-announcement-universe">
+                ${universeLines.map((line) => `<span>${line}</span>`).join('')}
+              </span>` : `
+              ${work.tipo ? `<span class="home-work-meta">
                 ${work.tipo} · ${work.genero}
-              </span>
+              </span>` : ''}
 
               <span class="home-work-synopsis">
                 ${work.sinopse}
-              </span>
+              </span>`}
 
               <span class="home-work-action">
                 ${isUpcoming ? 'EM BREVE' : `Ler ${work.titulo}`}
               </span>
             </span>
+          </span>
+          <span class="home-work-universe">
+            ${universeLines.map((line) => `<span>${line}</span>`).join('')}
           </span>
         </${tag}>
       </li>`;

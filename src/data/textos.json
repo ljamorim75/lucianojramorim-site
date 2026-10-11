@@ -12,18 +12,5 @@
     "arquivoConteudo": "monaksia.html",
     "imagem": "/assets/img/monaksia-estacao-orbital.jpg",
     "imagemSocial": "/assets/img/og-monaksia.png"
-  },
-  {
-    "numero": "02",
-    "titulo": "A Esfera",
-    "slug": "a-esfera",
-    "tipo": "Conto",
-    "genero": "Ficção científica",
-    "sinopse": "O que resta da humanidade lança ao espaço uma esfera capaz de reiniciar o mundo. Dentro dela, a experiência humana começa de novo.",
-    "status": "em_breve",
-    "dataPublicacao": "",
-    "tempoLeitura": "A definir",
-    "arquivoConteudo": "a-esfera.html",
-    "imagem": "/assets/img/a-esfera-via-lactea.png"
   }
 ]

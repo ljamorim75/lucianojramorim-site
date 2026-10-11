@@ -965,6 +965,7 @@ h3 {
 }
 
 .home-work {
+  container-type: inline-size;
   position: relative;
   min-width: 0;
   flex: 1 1 0;
@@ -972,7 +973,7 @@ h3 {
   background: var(--black);
   overflow: hidden;
   transition:
-    flex-grow .9s cubic-bezier(.22, 1, .36, 1),
+    flex-grow 1.2s cubic-bezier(.22, 1, .36, 1),
     background-color .25s ease;
 }
 
@@ -1136,8 +1137,39 @@ button.home-work-link {
   transform: translate(1.25rem, -50%);
   pointer-events: none;
   transition:
-    opacity .9s cubic-bezier(.22, 1, .36, 1),
-    transform .9s cubic-bezier(.22, 1, .36, 1);
+    opacity 1.2s cubic-bezier(.22, 1, .36, 1),
+    transform 1.2s cubic-bezier(.22, 1, .36, 1);
+}
+
+.home-work-universe {
+  position: absolute;
+  inset: auto .25rem 1.5rem;
+  display: grid;
+  gap: .2rem;
+  color: var(--silver);
+  font-size: clamp(.45rem, 7cqi, .7rem);
+  line-height: 1.4;
+  letter-spacing: .08em;
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.home-work-announcement-title {
+  font: 400 clamp(1.1rem, 2vw, 1.6rem)/1.2 var(--serif);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.home-work-announcement-universe {
+  display: grid;
+  gap: .15rem;
+  margin-top: 1rem;
+  color: var(--silver);
+  font-size: .7rem;
+  line-height: 1.4;
+  letter-spacing: .12em;
+  text-transform: uppercase;
 }
 
 .home-work-meta,
@@ -1165,7 +1197,8 @@ button.home-work-link {
 
 .home-work--available:hover,
 .home-work--available:focus-within {
-  flex-grow: 4.5;
+  /* Preserve the open width of the ten-slot shelf with eleven closed spines. */
+  flex-grow: 8.555556;
   background: #0c0c0e;
 }
 
@@ -1213,6 +1246,7 @@ button.home-work-link {
     writing-mode: horizontal-tb;
     transform-origin: top left;
     transform: rotate(90deg);
+    font-size: clamp(1rem, min(1.5vw, 5vh), 1.5rem);
   }
 
   .shell {
@@ -1269,6 +1303,30 @@ button.home-work-link {
 }
 
 @media (max-width: 47.99rem) {
+  .home-page {
+    overflow: visible;
+  }
+
+  .home-library {
+    height: auto;
+    overflow: visible;
+  }
+
+  .home-work-link {
+    min-height: inherit;
+  }
+
+  .home-work-universe {
+    inset: auto 1rem .75rem auto;
+    font-size: .55rem;
+    text-align: right;
+  }
+
+  .home-work--available.is-open,
+  .home-work--available:focus-within {
+    min-height: 16rem;
+  }
+
   .home-page .header-inner {
     min-height: 5.25rem;
   }
@@ -1298,7 +1356,7 @@ button.home-work-link {
 
   .home-work {
     min-width: auto;
-    min-height: 0;
+    min-height: 4.5rem;
   }
 
   .home-work-link,

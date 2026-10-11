@@ -1,0 +1,14 @@
+[
+  { "slug": "monaksia", "titulo": "MONAKSÍA", "universo": ["A", "REDE"] },
+  { "slug": "abate", "titulo": "ABATE", "universo": ["SEED"] },
+  { "slug": "o-manuscrito", "titulo": "O MANUSCRITO", "universo": ["CENTAURI"] },
+  { "slug": "oportunidade", "titulo": "OPORTUNIDADE", "universo": ["NOVA", "AURORA"] },
+  { "slug": "o-eco-de-metal", "titulo": "O ECO DE METAL", "universo": ["A", "FERIDA", "DO", "MUNDO"] },
+  { "slug": "o-estalo-seco", "titulo": "O ESTALO SECO", "universo": ["PRIVAÇÃO"] },
+  { "slug": "o-cubo", "titulo": "O CUBO", "universo": ["RESTOS"] },
+  { "slug": "o-bosque", "titulo": "O BOSQUE", "universo": ["FRAGMENTOS"] },
+  { "slug": "o-jardim", "titulo": "O JARDIM", "universo": ["SEM", "DESTINATÁRIO", "CONHECIDO"] },
+  { "slug": "escolha", "titulo": "ESCOLHA", "universo": ["O", "DOM"] },
+  { "slug": "a-numantina", "titulo": "A NUMANTINA", "universo": ["O", "OUTRO", "LADO", "DA", "GLÓRIA"] },
+  { "slug": "o-visitante", "titulo": "O VISITANTE", "universo": ["O", "OBSERVADOR"] }
+]

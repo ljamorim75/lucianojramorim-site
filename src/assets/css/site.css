@@ -442,6 +442,31 @@ h3 {
   }
 }
 
+@media (min-width: 60rem) and (min-height: 44rem) {
+  .author-shell {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .author-shell > .site-header,
+  .author-shell > .site-footer {
+    flex: 0 0 auto;
+  }
+
+  .author-shell > main {
+    flex: 1 1 auto;
+  }
+
+  .author-shell .author-page {
+    padding-block: 1.25rem;
+  }
+
+  .author-shell > .site-footer {
+    padding-block: 2.5rem;
+  }
+}
+
 .contact-placeholder {
   margin-top: 2rem;
   padding: 1.25rem;

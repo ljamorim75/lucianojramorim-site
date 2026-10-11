@@ -177,7 +177,7 @@ function layout({
   ${schema}
 </head>
 
-<body${isHome ? ' class="home-page"' : ''}>
+<body${isHome ? ' class="home-page"' : route === '/autor/' ? ' class="author-shell"' : ''}>
   <a class="skip-link" href="#conteudo">
     Pular para o conteúdo
   </a>

@@ -937,6 +937,22 @@ button.home-work-link {
 }
 
 @media (min-width: 48rem) {
+  .home-work::after {
+    background:
+      linear-gradient(180deg, transparent, rgb(255 255 255 / 7%) 24%, rgb(255 255 255 / 7%) 76%, transparent) left / 1px 100% no-repeat,
+      linear-gradient(90deg, rgb(255 255 255 / 6%), rgb(255 255 255 / 3%) 32%, transparent 78%) top / 100% 1px no-repeat,
+      linear-gradient(90deg, rgb(255 255 255 / 6%), rgb(255 255 255 / 3%) 32%, transparent 78%) bottom / 100% 1px no-repeat;
+  }
+
+  .home-work-title {
+    position: absolute;
+    top: calc(2.5rem - clamp(1rem, 2vw, 2rem));
+    left: 0;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    transform: none;
+  }
+
   .shell {
     width: min(calc(100% - 4rem), var(--content));
   }

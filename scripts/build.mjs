@@ -177,7 +177,7 @@ function layout({
   ${schema}
 </head>
 
-<body${isHome ? ' class="home-page"' : route === '/autor/' ? ' class="author-shell"' : ''}>
+<body${isHome ? ' class="home-page"' : route === '/autor/' ? ' class="author-shell"' : route === '/contato/' ? ' class="contact-shell"' : ''}>
   <a class="skip-link" href="#conteudo">
     Pular para o conteúdo
   </a>
@@ -514,9 +514,9 @@ await writePage(
     current: 'contato',
 
     content:
-      `<header class="page-intro">
-        <div class="shell section-grid">
-          <div>
+      `<header class="page-intro contact-page">
+        <div class="shell contact-grid">
+          <div class="contact-identity">
             <p class="eyebrow">
               Contato
             </p>
@@ -526,17 +526,26 @@ await writePage(
             </h1>
           </div>
 
-          <div class="section-copy">
+          <div class="contact-copy">
             <p class="lede">
               Para questões relacionadas aos textos,
               projetos literários, convites ou outras
               formas de contato.
             </p>
 
-            <div class="contact-placeholder">
-              <p>
-                Canal de contato em definição.
+            <div class="contact-channel">
+              <p class="contact-label">
+                E-mail
               </p>
+              <a class="contact-email" href="mailto:contato@lucianojramorim.com.br">
+                contato@lucianojramorim.com.br
+              </a>
+            </div>
+
+            <div class="actions">
+              <a class="button button-secondary" href="mailto:contato@lucianojramorim.com.br">
+                Enviar e-mail
+              </a>
             </div>
           </div>
         </div>

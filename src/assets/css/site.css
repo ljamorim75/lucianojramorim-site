@@ -483,7 +483,7 @@ h3 {
 }
 
 .contact-page h1 {
-  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
 }
 
 .contact-copy {
@@ -513,7 +513,7 @@ h3 {
   overflow-wrap: anywhere;
 }
 
-@media (min-width: 60rem) {
+@media (min-width: 48rem) {
   .contact-grid {
     grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
     gap: clamp(2rem, 5vw, 5rem);
@@ -524,7 +524,7 @@ h3 {
   }
 }
 
-@media (min-width: 60rem) and (min-height: 44rem) {
+@media (min-width: 48rem) and (min-height: 40rem) {
   .contact-shell {
     min-height: 100dvh;
     display: flex;

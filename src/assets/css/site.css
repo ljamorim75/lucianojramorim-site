@@ -947,10 +947,12 @@ button.home-work-link {
   .home-work-title {
     position: absolute;
     top: calc(2.5rem - clamp(1rem, 2vw, 2rem));
-    left: 0;
-    writing-mode: vertical-rl;
-    text-orientation: upright;
-    transform: none;
+    left: 1em;
+    width: max-content;
+    white-space: nowrap;
+    writing-mode: horizontal-tb;
+    transform-origin: top left;
+    transform: rotate(90deg);
   }
 
   .shell {

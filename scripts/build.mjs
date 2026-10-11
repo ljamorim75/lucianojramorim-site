@@ -177,7 +177,7 @@ function layout({
   ${schema}
 </head>
 
-<body${isHome ? ' class="home-page"' : route === '/autor/' ? ' class="author-shell"' : route === '/contato/' ? ' class="contact-shell"' : ''}>
+<body${isHome ? ' class="home-page"' : route === '/autor/' ? ' class="author-shell"' : route === '/contato/' ? ' class="contact-shell"' : route === '/textos/' ? ' class="texts-shell"' : ''}>
   <a class="skip-link" href="#conteudo">
     Pular para o conteúdo
   </a>
@@ -377,24 +377,18 @@ const catalogue = visibleWorks
       const isUpcoming = isProduction && work.status === 'em_breve';
       const tag = isUpcoming ? 'article' : 'a';
       return `<${tag}
-        class="catalogue-item"
+        class="text-work"
         ${isUpcoming ? '' : `href="/textos/${work.slug}/"`}
       >
-        <span class="catalogue-number">
-          ${work.numero}
-        </span>
+          ${work.imagem ? `<img class="text-work-image" src="${work.imagem}" alt="" loading="lazy">` : ''}
+          <h2 class="text-work-title">${work.titulo}</h2>
 
-        <div>
-          ${work.imagem ? `<img class="catalogue-image" src="${work.imagem}" alt="" loading="lazy">` : ''}
-          <h2>${work.titulo}</h2>
-
-          <span class="catalogue-meta">
+          <span class="text-work-meta">
             ${work.tipo} · ${work.genero}
           </span>
-          ${isUpcoming ? '<span class="catalogue-status">EM BREVE</span>' : ''}
-        </div>
+          ${isUpcoming ? '<span class="text-work-status">EM BREVE</span>' : ''}
 
-        <p>
+        <p class="text-work-synopsis">
           ${work.sinopse}
         </p>
       </${tag}>`;
@@ -415,8 +409,9 @@ await writePage(
     current: 'textos',
 
     content:
-      `<header class="page-intro">
-        <div class="shell">
+      `<section class="texts-page">
+        <div class="shell texts-grid">
+          <header class="texts-intro">
           <p class="eyebrow">
             Biblioteca
           </p>
@@ -428,11 +423,13 @@ await writePage(
             reunidas em uma biblioteca em expansão.
           </p>
 
-          <div class="catalogue">
+          </header>
+
+          <div class="texts-list">
             ${catalogue}
           </div>
         </div>
-      </header>`
+      </section>`
   })
 );
 

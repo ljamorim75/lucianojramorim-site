@@ -302,7 +302,7 @@ const homeItems = homeSlots
             </span>`
           : '';
 
-      const isUpcoming = isProduction && work.status === 'em_breve';
+      const isUpcoming = work.status === 'em_breve' && (isProduction || !pageWorks.includes(work));
       const tag = isUpcoming ? 'button' : 'a';
 
       return `<li class="home-work home-work--available">
@@ -375,7 +375,7 @@ await writePage(
 const catalogue = visibleWorks
   .map(
     (work) => {
-      const isUpcoming = isProduction && work.status === 'em_breve';
+      const isUpcoming = work.status === 'em_breve' && (isProduction || !pageWorks.includes(work));
       const tag = isUpcoming ? 'article' : 'a';
       return `<${tag}
         class="text-work"

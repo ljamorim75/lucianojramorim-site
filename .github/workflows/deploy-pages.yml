@@ -42,7 +42,8 @@ jobs:
           assert(readFileSync('dist/sitemap.xml', 'utf8').includes('https://lucianojramorim.com.br/textos/monaksia/'), 'Published route missing');
           for (const file of ['dist/index.html', 'dist/textos/index.html']) {
             const html = readFileSync(file, 'utf8');
-            assert(html.includes('MONAKSÍA') && !/EM BREVE/iu.test(html), `Published metadata incorrect: ${file}`);
+            const monaksiaLink = html.match(/<a\b[^>]*href="\/textos\/monaksia\/"[^>]*>[\s\S]*?<\/a>/u)?.[0];
+            assert(monaksiaLink?.includes('MONAKSÍA') && !/EM BREVE/iu.test(monaksiaLink), `Published metadata incorrect: ${file}`);
             assert(html.includes('href="/textos/monaksia/"'), `Published link missing: ${file}`);
           }
           const story = readFileSync('dist/textos/monaksia/index.html', 'utf8');

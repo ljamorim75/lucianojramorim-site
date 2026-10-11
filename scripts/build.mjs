@@ -453,9 +453,9 @@ await writePage(
     current: 'autor',
 
     content:
-      `<header class="page-intro">
-        <div class="shell section-grid">
-          <div>
+      `<header class="page-intro author-page">
+        <div class="shell author-grid">
+          <div class="author-identity">
             <p class="eyebrow">
               Autor
             </p>
@@ -466,12 +466,18 @@ await writePage(
             </h1>
           </div>
 
-          <div class="section-copy">
+          <div class="author-copy">
             <p class="lede">
-              Luciano Jr Amorim escreve ficção especulativa
-              sobre tecnologia, sistemas, isolamento e as formas
-              pelas quais ideias levadas ao limite transformam
-              a experiência humana.
+              Escreve ficção especulativa sobre pessoas colocadas diante de sistemas, tecnologias e ideias levadas ao limite.
+            </p>
+
+            <p class="lede">
+              Seus textos exploram isolamento, controle, escolha e as consequências humanas de mundos construídos para funcionar.
+            </p>
+
+            <p class="author-themes">
+              Ficção especulativa<br>
+              Ficção científica · Distopia
             </p>
 
             <div class="actions">

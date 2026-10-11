@@ -382,6 +382,53 @@ h3 {
   max-width: 40rem;
 }
 
+.author-grid {
+  display: grid;
+  align-items: start;
+  gap: 3rem;
+}
+
+.author-identity,
+.author-copy {
+  min-width: 0;
+}
+
+.author-page h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+}
+
+.author-copy {
+  max-width: 40rem;
+}
+
+.author-copy .lede {
+  margin: 0;
+}
+
+.author-copy .lede + .lede {
+  margin-top: 1.5rem;
+}
+
+.author-themes {
+  margin: 2rem 0 0;
+  color: var(--silver);
+  font-size: .75rem;
+  line-height: 1.9;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 48rem) {
+  .author-grid {
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+
+  .author-copy {
+    padding-top: 2.5rem;
+  }
+}
+
 .contact-placeholder {
   margin-top: 2rem;
   padding: 1.25rem;

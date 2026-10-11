@@ -37,13 +37,17 @@ jobs:
           }
           assert.equal(readFileSync('dist/CNAME', 'utf8').trim(), 'lucianojramorim.com.br');
           const works = JSON.parse(readFileSync('src/data/textos.json', 'utf8'));
-          assert.equal(works.find((work) => work.slug === 'monaksia')?.status, 'em_breve');
-          assert(!existsSync('dist/textos/monaksia/index.html'), 'Draft page exposed');
-          assert(!readFileSync('dist/sitemap.xml', 'utf8').includes('/textos/monaksia/'), 'Draft route exposed');
+          assert.equal(works.find((work) => work.slug === 'monaksia')?.status, 'publicado');
+          assert(existsSync('dist/textos/monaksia/index.html'), 'Published story missing');
+          assert(readFileSync('dist/sitemap.xml', 'utf8').includes('https://lucianojramorim.com.br/textos/monaksia/'), 'Published route missing');
           for (const file of ['dist/index.html', 'dist/textos/index.html']) {
             const html = readFileSync(file, 'utf8');
-            assert(html.includes('MONAKSÍA') && /EM BREVE/iu.test(html), `Upcoming metadata missing: ${file}`);
-            assert(!/href\s*=\s*["'][^"']*\/textos\/monaksia\/?["']/iu.test(html), `Draft link exposed: ${file}`);
+            assert(html.includes('MONAKSÍA') && !/EM BREVE/iu.test(html), `Published metadata incorrect: ${file}`);
+            assert(html.includes('href="/textos/monaksia/"'), `Published link missing: ${file}`);
+          }
+          const story = readFileSync('dist/textos/monaksia/index.html', 'utf8');
+          for (const marker of ['PROJETO MONAKSÍA', 'POPULAÇÃO: 0', 'REDE 23.5', 'INDIVÍDUO 18', 'data-reading-content']) {
+            assert(story.includes(marker), `Published story marker missing: ${marker}`);
           }
           function validatePages(directory) {
             for (const entry of readdirSync(directory, { withFileTypes: true })) {
@@ -51,7 +55,7 @@ jobs:
               if (entry.isDirectory()) {
                 validatePages(file);
               } else if (entry.name.endsWith('.html')) {
-                assert(!/manuscript-placeholder|manuscript-status|Publicação em preparação|data-reading-content|story-paragraph/iu.test(readFileSync(file, 'utf8')), `Private content or marker in ${file}`);
+                assert(!/manuscript-placeholder|manuscript-status|Publicação em preparação/iu.test(readFileSync(file, 'utf8')), `Draft placeholder in ${file}`);
               }
             }
           }

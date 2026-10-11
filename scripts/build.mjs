@@ -85,7 +85,8 @@ function layout({
   socialImageAlt = '',
   canonical: includeCanonical = true,
   robots = '',
-  social = true
+  social = true,
+  socialType = 'website'
 }) {
   const canonical = `${domain}${route}`;
   const isHome = current === 'inicio';
@@ -153,7 +154,7 @@ function layout({
     href="/assets/img/favicon-lja-16.png"
   >
 
-  ${social ? `<meta property="og:type" content="website">
+  ${social ? `<meta property="og:type" content="${socialType}">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="Luciano Jr Amorim">
   <meta property="og:title" content="${title}">
@@ -577,6 +578,8 @@ for (const work of pageWorks) {
       name:
         work.titulo,
 
+      ...(work.dataPublicacao ? { datePublished: work.dataPublicacao } : {}),
+
       author: {
         '@type':
           'Person',
@@ -716,6 +719,9 @@ for (const work of pageWorks) {
 
       socialImage:
         work.imagemSocial || '/assets/img/og-site.png',
+
+      socialType:
+        'article',
 
       socialImageAlt:
         `${work.titulo} \u2014 um conto de Luciano Jr Amorim`

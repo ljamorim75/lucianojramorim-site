@@ -26,5 +26,17 @@
     "arquivoConteudo": "abate.html",
     "imagem": "/assets/img/abate-seed-aquarela.png",
     "imagemSocial": "/assets/img/og-abate.png"
+  },
+  {
+    "numero": "03",
+    "titulo": "O MANUSCRITO",
+    "slug": "o-manuscrito",
+    "tipo": "Conto",
+    "genero": "Ficção científica",
+    "sinopse": "Depois de quase vinte e um anos de viagem, Adrian continua responsável por ouvir os outros. O problema é que já não sabe quanto de si ainda consegue manter intacto.",
+    "status": "publicado",
+    "dataPublicacao": "2026-10-12",
+    "tempoLeitura": "6 min",
+    "arquivoConteudo": "o-manuscrito.html"
   }
 ]

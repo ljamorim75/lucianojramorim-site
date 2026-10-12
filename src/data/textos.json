@@ -40,5 +40,17 @@
     "arquivoConteudo": "o-manuscrito.html",
     "imagem": "/assets/img/o-manuscrito-sketch.png",
     "imagemSocial": "/assets/img/og-o-manuscrito.png"
+  },
+  {
+    "numero": "04",
+    "titulo": "OPORTUNIDADE",
+    "slug": "oportunidade",
+    "tipo": "Conto",
+    "genero": "Distopia",
+    "sinopse": "Um passe temporário para o setor Ouro parece oferecer à filha de uma família Bronze a chance de mudar o destino do pai. Em Nova Aurora, porém, algumas oportunidades cobram um preço que não aparece em nenhum regulamento.",
+    "status": "publicado",
+    "dataPublicacao": "2026-10-12",
+    "tempoLeitura": "11 min",
+    "arquivoConteudo": "oportunidade.html"
   }
 ]

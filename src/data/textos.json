@@ -12,5 +12,17 @@
     "arquivoConteudo": "monaksia.html",
     "imagem": "/assets/img/monaksia-estacao-orbital.jpg",
     "imagemSocial": "/assets/img/og-monaksia.png"
+  },
+  {
+    "numero": "02",
+    "titulo": "ABATE",
+    "slug": "abate",
+    "tipo": "Conto",
+    "genero": "Ficção científica",
+    "sinopse": "Gabriel tem sete anos. Seus pais só precisam decidir até onde estão dispostos a ir para garantir que ele não fique para trás.",
+    "status": "publicado",
+    "dataPublicacao": "2026-10-11",
+    "tempoLeitura": "10 min",
+    "arquivoConteudo": "abate.html"
   }
 ]

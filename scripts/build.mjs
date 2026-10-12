@@ -272,7 +272,7 @@ const homeSlots = shelf.map((spine) => {
 const homeItems = homeSlots
   .map(
     (work) => {
-      const universeLines = work.universo;
+      const universeLines = work.universoLinhas;
 
       const media =
         work.imagem
@@ -306,7 +306,7 @@ const homeItems = homeSlots
             <span class="home-work-details"${isUpcoming ? ` id="${work.slug}-details"` : ''}>
               ${isUpcoming ? `<span class="home-work-announcement-title">${work.titulo}</span>
               <span class="home-work-announcement-universe">
-                ${universeLines.map((line) => `<span>${line}</span>`).join('')}
+                ${universeLines.map((line) => `<span class="home-work-universe-line">${line}</span>`).join('')}
               </span>` : `
               ${work.tipo ? `<span class="home-work-meta">
                 ${work.tipo} · ${work.genero}
@@ -322,7 +322,7 @@ const homeItems = homeSlots
             </span>
           </span>
           <span class="home-work-universe">
-            ${universeLines.map((line) => `<span>${line}</span>`).join('')}
+            ${universeLines.map((line) => `<span class="home-work-universe-line">${line}</span>`).join('')}
           </span>
         </${tag}>
       </li>`;

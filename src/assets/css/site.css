@@ -1170,6 +1170,12 @@ button.home-work-link {
   line-height: 1.4;
   letter-spacing: .12em;
   text-transform: uppercase;
+  text-align: center;
+}
+
+.home-work-universe-line {
+  display: block;
+  text-align: center;
 }
 
 .home-work-meta,
@@ -1319,7 +1325,7 @@ button.home-work-link {
   .home-work-universe {
     inset: auto 1rem .75rem auto;
     font-size: .55rem;
-    text-align: right;
+    text-align: center;
   }
 
   .home-work--available.is-open,

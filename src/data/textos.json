@@ -51,6 +51,8 @@
     "status": "publicado",
     "dataPublicacao": "2026-10-12",
     "tempoLeitura": "11 min",
-    "arquivoConteudo": "oportunidade.html"
+    "arquivoConteudo": "oportunidade.html",
+    "imagem": "/assets/img/oportunidade-nova-aurora.png",
+    "imagemSocial": "/assets/img/og-oportunidade.png"
   }
 ]

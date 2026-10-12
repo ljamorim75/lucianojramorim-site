@@ -23,6 +23,8 @@
     "status": "publicado",
     "dataPublicacao": "2026-10-11",
     "tempoLeitura": "10 min",
-    "arquivoConteudo": "abate.html"
+    "arquivoConteudo": "abate.html",
+    "imagem": "/assets/img/abate-seed-aquarela.png",
+    "imagemSocial": "/assets/img/og-abate.png"
   }
 ]

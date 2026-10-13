@@ -527,13 +527,13 @@ await writePage(
               <p class="contact-label">
                 E-mail
               </p>
-              <a class="contact-email" href="mailto:contato@lucianojramorim.com.br">
-                contato@lucianojramorim.com.br
+              <a class="contact-email" href="mailto:contato.ljamorim@gmail.com">
+                contato.ljamorim@gmail.com
               </a>
             </div>
 
             <div class="actions">
-              <a class="button button-secondary" href="mailto:contato@lucianojramorim.com.br">
+              <a class="button button-secondary" href="mailto:contato.ljamorim@gmail.com">
                 Enviar e-mail
               </a>
             </div>

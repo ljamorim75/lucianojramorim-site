@@ -73,6 +73,19 @@ const navItems = [
   ['contato', '/contato/', 'Contato']
 ];
 
+function footerCopyright() {
+  return `<span class="footer-copyright-text">© Luciano Jr Amorim. Todos os direitos reservados.</span>
+    <span class="footer-social-separator" aria-hidden="true">·</span>
+    <a class="footer-instagram" href="https://www.instagram.com/l.j.amorim/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Luciano Jr Amorim">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+        <circle cx="12" cy="12" r="4"></circle>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
+      </svg>
+      <span>@l.j.amorim</span>
+    </a>`;
+}
+
 function layout({
   title,
   description,
@@ -111,7 +124,7 @@ function layout({
   const footer = !showFooter
     ? ''
     : isHome
-      ? `  <footer class="home-footer"><div class="shell">© Luciano Jr Amorim. Todos os direitos reservados.</div></footer>`
+      ? `  <footer class="home-footer"><div class="shell footer-social">${footerCopyright()}</div></footer>`
       : `  <footer class="site-footer">
     <div class="shell footer-grid">
       <div class="footer-title">Luciano Jr Amorim</div>
@@ -122,7 +135,7 @@ function layout({
         <a href="/contato/">Contato</a>
       </nav>
 
-      <div class="footer-copy">© Luciano Jr Amorim. Todos os direitos reservados.</div>
+      <div class="footer-copy footer-social">${footerCopyright()}</div>
     </div>
   </footer>`;
 
@@ -675,10 +688,7 @@ for (const work of pageWorks) {
         Luciano Jr Amorim
       </p>
 
-      <p class="story-copyright">
-        © Luciano Jr Amorim.
-        Todos os direitos reservados.
-      </p>
+      <p class="story-copyright footer-social">${footerCopyright()}</p>
 
       <a href="/textos/">
         ← Voltar aos textos

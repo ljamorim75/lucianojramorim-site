@@ -1486,3 +1486,35 @@ button.home-work-link {
   white-space: nowrap !important;
   border: 0 !important;
 }
+
+.footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem .5rem;
+}
+
+.home-footer .footer-social,
+.story-end .footer-social {
+  justify-content: center;
+}
+
+.footer-instagram,
+.story-end .footer-instagram {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: none;
+  text-decoration: none;
+}
+
+.footer-instagram:hover {
+  color: var(--silver);
+}
+
+.footer-instagram svg {
+  flex: 0 0 auto;
+}

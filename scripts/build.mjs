@@ -6,6 +6,7 @@ const root = process.cwd();
 const src = path.join(root, 'src');
 const dist = path.join(root, 'dist');
 const domain = 'https://lucianojramorim.com.br';
+const googleAnalyticsId = 'G-35T91X4MC3';
 const isProduction = process.argv.includes('--prod');
 
 const allWorks = JSON.parse(
@@ -72,6 +73,15 @@ const navItems = [
   ['autor', '/autor/', 'Autor'],
   ['contato', '/contato/', 'Contato']
 ];
+
+function escapeHtmlAttribute(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
+}
 
 function footerCopyright() {
   return `<span class="footer-copyright-text">© Luciano Jr Amorim. Todos os direitos reservados.</span>
@@ -144,6 +154,34 @@ function layout({
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script>
+    (() => {
+      const analyticsHosts = new Set([
+        'lucianojramorim.com.br',
+        'www.lucianojramorim.com.br'
+      ]);
+
+      if (!analyticsHosts.has(window.location.hostname)) return;
+
+      const measurementId = '${googleAnalyticsId}';
+      const googleTag = document.createElement('script');
+
+      googleTag.async = true;
+      googleTag.src =
+        'https://www.googletagmanager.com/gtag/js?id=' +
+        measurementId;
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function gtag() {
+        window.dataLayer.push(arguments);
+      };
+
+      window.gtag('js', new Date());
+      window.gtag('config', measurementId);
+      document.head.appendChild(googleTag);
+    })();
+  </script>
 
   <title>${title}</title>
 
@@ -675,6 +713,8 @@ for (const work of pageWorks) {
       class="story-content"
       id="inicio-leitura"
       data-reading-content
+      data-story-slug="${escapeHtmlAttribute(work.slug)}"
+      data-story-title="${escapeHtmlAttribute(work.titulo)}"
     >
       ${manuscript}
     </article>` +

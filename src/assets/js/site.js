@@ -83,6 +83,27 @@ homeWorkLinks.forEach((homeWorkLink) => {
   });
 });
 
+const analyticsHosts = new Set([
+  'lucianojramorim.com.br',
+  'www.lucianojramorim.com.br'
+]);
+
+const analyticsEnabled =
+  analyticsHosts.has(window.location.hostname) &&
+  typeof window.gtag === 'function';
+
+function sendAnalyticsEvent(eventName, eventParameters = {}) {
+  if (!analyticsEnabled) return false;
+
+  window.gtag(
+    'event',
+    eventName,
+    eventParameters
+  );
+
+  return true;
+}
+
 const progress =
   document.querySelector(
     '[data-reading-progress]'
@@ -93,43 +114,171 @@ const readingContent =
     '[data-reading-content]'
   );
 
-if (progress && readingContent) {
-  const updateProgress = () => {
-    const start =
-      readingContent.offsetTop;
+if (readingContent) {
+  const storyParameters = {
+    story_slug:
+      readingContent.dataset.storySlug || '',
+    story_title:
+      readingContent.dataset.storyTitle || ''
+  };
 
-    const distance =
-      readingContent.offsetHeight -
-      window.innerHeight;
+  const hasStoryParameters =
+    Boolean(
+      storyParameters.story_slug &&
+      storyParameters.story_title
+    );
 
-    const amount =
-      distance > 0
-        ? (window.scrollY - start) / distance
+  const sentReadingEvents = new Set();
+
+  const sendReadingEventOnce = (eventName) => {
+    if (
+      !hasStoryParameters ||
+      sentReadingEvents.has(eventName)
+    ) {
+      return;
+    }
+
+    if (
+      sendAnalyticsEvent(
+        eventName,
+        storyParameters
+      )
+    ) {
+      sentReadingEvents.add(eventName);
+    }
+  };
+
+  const readingMilestones = [
+    [0.5, 'story_50_percent'],
+    [0.75, 'story_75_percent'],
+    [0.9, 'story_90_percent']
+  ];
+
+  const readingEndElement =
+    readingContent.lastElementChild;
+
+  const updateReadingExperience = () => {
+    if (progress) {
+      const start =
+        readingContent.offsetTop;
+
+      const distance =
+        readingContent.offsetHeight -
+        window.innerHeight;
+
+      const amount =
+        distance > 0
+          ? (window.scrollY - start) / distance
+          : 0;
+
+      progress.style.setProperty(
+        '--reading-progress',
+        `${
+          Math.min(
+            1,
+            Math.max(0, amount)
+          ) * 100
+        }%`
+      );
+    }
+
+    if (!analyticsEnabled) return;
+
+    const readingBounds =
+      readingContent.getBoundingClientRect();
+
+    const readingEnd =
+      readingEndElement
+        ?.getBoundingClientRect().bottom ??
+      readingBounds.bottom;
+
+    if (
+      readingBounds.top <=
+        window.innerHeight * 0.75 &&
+      readingEnd > 0
+    ) {
+      sendReadingEventOnce('start_reading');
+    }
+
+    if (
+      !sentReadingEvents.has('start_reading')
+    ) {
+      return;
+    }
+
+    const readingHeight =
+      Math.max(
+        0,
+        readingEnd - readingBounds.top
+      );
+
+    const readingAmount =
+      readingHeight > 0
+        ? Math.min(
+            1,
+            Math.max(
+              0,
+              (
+                window.innerHeight -
+                readingBounds.top
+              ) /
+              readingHeight
+            )
+          )
         : 0;
 
-    progress.style.setProperty(
-      '--reading-progress',
-      `${
-        Math.min(
-          1,
-          Math.max(0, amount)
-        ) * 100
-      }%`
+    readingMilestones.forEach(
+      ([threshold, eventName]) => {
+        if (readingAmount >= threshold) {
+          sendReadingEventOnce(eventName);
+        }
+      }
     );
+
+    if (
+      readingHeight > 0 &&
+      readingEnd <=
+        window.innerHeight + 1
+    ) {
+      sendReadingEventOnce('story_complete');
+    }
   };
+
+  let readingUpdateScheduled = false;
+
+  const scheduleReadingUpdate = () => {
+    if (readingUpdateScheduled) return;
+
+    readingUpdateScheduled = true;
+
+    window.requestAnimationFrame(() => {
+      readingUpdateScheduled = false;
+      updateReadingExperience();
+    });
+  };
+
+  const startReadingLink =
+    document.querySelector(
+      'a[href="#inicio-leitura"]'
+    );
+
+  startReadingLink?.addEventListener(
+    'click',
+    () => sendReadingEventOnce('start_reading')
+  );
 
   document.addEventListener(
     'scroll',
-    updateProgress,
+    scheduleReadingUpdate,
     { passive: true }
   );
 
   window.addEventListener(
     'resize',
-    updateProgress
+    scheduleReadingUpdate
   );
 
-  updateProgress();
+  scheduleReadingUpdate();
 }
 
 const sizeButtons =
@@ -155,5 +304,22 @@ sizeButtons.forEach((button) => {
         String(item === button)
       );
     });
+  });
+});
+
+const instagramLinks =
+  document.querySelectorAll(
+    '.footer-instagram[href="https://www.instagram.com/l.j.amorim/"]'
+  );
+
+instagramLinks.forEach((link) => {
+  link.addEventListener('click', () => {
+    sendAnalyticsEvent(
+      'instagram_click',
+      {
+        link_url: link.href,
+        link_location: 'footer'
+      }
+    );
   });
 });

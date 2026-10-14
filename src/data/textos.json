@@ -54,5 +54,17 @@
     "arquivoConteudo": "oportunidade.html",
     "imagem": "/assets/img/oportunidade-nova-aurora.png",
     "imagemSocial": "/assets/img/og-oportunidade.png"
+  },
+  {
+    "numero": "05",
+    "titulo": "O ECO DE METAL",
+    "slug": "o-eco-de-metal",
+    "tipo": "Conto",
+    "genero": "Fantasia científica",
+    "sinopse": "Depois de décadas perseguindo vestígios dos Eter-forjadores, Mestre Halian retorna à Borda da Sangria para testar um sinal que ninguém mais levaria a sério.",
+    "status": "publicado",
+    "dataPublicacao": "2026-10-13",
+    "tempoLeitura": "12 min",
+    "arquivoConteudo": "o-eco-de-metal.html"
   }
 ]

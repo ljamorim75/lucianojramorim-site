@@ -65,6 +65,8 @@
     "status": "publicado",
     "dataPublicacao": "2026-10-13",
     "tempoLeitura": "12 min",
-    "arquivoConteudo": "o-eco-de-metal.html"
+    "arquivoConteudo": "o-eco-de-metal.html",
+    "imagem": "/assets/img/o-eco-de-metal.png",
+    "imagemSocial": "/assets/img/og-o-eco-de-metal.png"
   }
 ]

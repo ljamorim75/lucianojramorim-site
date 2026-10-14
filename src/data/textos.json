@@ -68,5 +68,17 @@
     "arquivoConteudo": "o-eco-de-metal.html",
     "imagem": "/assets/img/o-eco-de-metal.png",
     "imagemSocial": "/assets/img/og-o-eco-de-metal.png"
+  },
+  {
+    "numero": "06",
+    "titulo": "O ESTALO SECO / O CORTE SECO",
+    "slug": "o-estalo-seco-o-corte-seco",
+    "tipo": "Conto",
+    "genero": "Ficção científica / distopia",
+    "sinopse": "Em um mundo onde a consciência humana sobrevive à carne, um androide percorre cidades abandonadas em busca de peças, enquanto simulações oferecem, por alguns instantes, as sensações que a humanidade perdeu.",
+    "status": "publicado",
+    "dataPublicacao": "2026-10-14",
+    "tempoLeitura": "10 min",
+    "arquivoConteudo": "o-estalo-seco-o-corte-seco.html"
   }
 ]

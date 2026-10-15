@@ -79,6 +79,8 @@
     "status": "publicado",
     "dataPublicacao": "2026-10-14",
     "tempoLeitura": "10 min",
-    "arquivoConteudo": "o-estalo-seco-o-corte-seco.html"
+    "arquivoConteudo": "o-estalo-seco-o-corte-seco.html",
+    "imagem": "/assets/img/o-estalo-seco-o-corte-seco.png",
+    "imagemSocial": "/assets/img/og-o-estalo-seco-o-corte-seco.png"
   }
 ]

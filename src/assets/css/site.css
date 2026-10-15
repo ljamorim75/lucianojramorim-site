@@ -887,7 +887,7 @@ h3 {
   font-family: var(--serif);
 }
 
-.story-end a {
+.story-end > a {
   display: inline-block;
   margin-top: 3rem;
   font: 650 .78rem/1 var(--sans);
@@ -1232,7 +1232,7 @@ button.home-work-link {
   color: #797b81;
   font-size: .75rem;
   letter-spacing: .035em;
-  text-align: center;
+  text-align: left;
 }
 
 @media (min-width: 48rem) {
@@ -1487,34 +1487,61 @@ button.home-work-link {
   border: 0 !important;
 }
 
-.footer-social {
+.footer-lower {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: .35rem .5rem;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  min-width: 0;
+  text-align: left;
 }
 
-.home-footer .footer-social,
-.story-end .footer-social {
-  justify-content: center;
+.footer-social-links {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .25rem;
 }
 
-.footer-instagram,
-.story-end .footer-instagram {
+.footer-social-link {
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
-  gap: .35rem;
+  justify-content: center;
   margin: 0;
+  color: inherit;
   font: inherit;
-  letter-spacing: inherit;
+  letter-spacing: normal;
+  opacity: .82;
   text-transform: none;
   text-decoration: none;
+  transition: color .18s ease, opacity .18s ease;
 }
 
-.footer-instagram:hover {
+.footer-social-link:hover {
   color: var(--silver);
+  opacity: 1;
 }
 
-.footer-instagram svg {
+.footer-social-icon {
+  width: 1.0625rem;
+  height: 1.0625rem;
   flex: 0 0 auto;
+  display: block;
+  pointer-events: none;
+}
+
+@media (max-width: 47.99rem) {
+  .footer-lower {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .75rem;
+  }
+
+  .footer-social-links {
+    justify-content: flex-start;
+  }
 }

@@ -84,16 +84,38 @@ function escapeHtmlAttribute(value) {
 }
 
 function footerCopyright() {
-  return `<span class="footer-copyright-text">© Luciano Jr Amorim. Todos os direitos reservados.</span>
-    <span class="footer-social-separator" aria-hidden="true">·</span>
-    <a class="footer-instagram" href="https://www.instagram.com/l.j.amorim/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Luciano Jr Amorim">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+  return `<span class="footer-copyright-text">© Luciano Jr Amorim. Todos os direitos reservados.</span>`;
+}
+
+function footerSocialLinks() {
+  return `<nav class="footer-social-links" aria-label="Redes sociais">
+    <a class="footer-social-link footer-instagram" href="https://www.instagram.com/l.j.amorim/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Luciano Jr Amorim" data-footer-social="instagram">
+      <svg class="footer-social-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
         <rect x="3" y="3" width="18" height="18" rx="5"></rect>
         <circle cx="12" cy="12" r="4"></circle>
         <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
       </svg>
-      <span>@l.j.amorim</span>
-    </a>`;
+    </a>
+
+    <a class="footer-social-link footer-tiktok" href="https://www.tiktok.com/@l.j.amorim" target="_blank" rel="noopener noreferrer" aria-label="TikTok de Luciano Jr Amorim" data-footer-social="tiktok">
+      <svg class="footer-social-icon" width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+        <path d="M19.59 6.686a4.793 4.793 0 0 1-3.771-4.245h-3.512v14.124a2.914 2.914 0 1 1-2.057-2.784V10.2a6.425 6.425 0 1 0 5.568 6.365V9.404a8.301 8.301 0 0 0 4.773 1.526V7.414a4.807 4.807 0 0 1-1.001-.728Z"></path>
+      </svg>
+    </a>
+
+    <a class="footer-social-link footer-substack" href="https://substack.com/@ljamorim" target="_blank" rel="noopener noreferrer" aria-label="Substack de Luciano Jr Amorim" data-footer-social="substack">
+      <svg class="footer-social-icon" width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+        <path d="M1.46 0h21.08v2.836H1.46V0Zm0 5.406h21.08v2.836H1.46V5.406Zm0 5.406h21.08v2.836H1.46v-2.836Zm0 5.405h21.08V24L12 18.11 1.46 24v-7.783Z"></path>
+      </svg>
+    </a>
+  </nav>`;
+}
+
+function footerLower(className = '') {
+  return `<div class="footer-lower${className ? ` ${className}` : ''}">
+    ${footerCopyright()}
+    ${footerSocialLinks()}
+  </div>`;
 }
 
 function layout({
@@ -134,7 +156,7 @@ function layout({
   const footer = !showFooter
     ? ''
     : isHome
-      ? `  <footer class="home-footer"><div class="shell footer-social">${footerCopyright()}</div></footer>`
+      ? `  <footer class="home-footer">${footerLower('shell')}</footer>`
       : `  <footer class="site-footer">
     <div class="shell footer-grid">
       <div class="footer-title">Luciano Jr Amorim</div>
@@ -145,7 +167,7 @@ function layout({
         <a href="/contato/">Contato</a>
       </nav>
 
-      <div class="footer-copy footer-social">${footerCopyright()}</div>
+      ${footerLower('footer-copy')}
     </div>
   </footer>`;
 
@@ -728,7 +750,7 @@ for (const work of pageWorks) {
         Luciano Jr Amorim
       </p>
 
-      <p class="story-copyright footer-social">${footerCopyright()}</p>
+      ${footerLower('story-copyright')}
 
       <a href="/textos/">
         ← Voltar aos textos

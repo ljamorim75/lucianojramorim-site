@@ -307,15 +307,28 @@ sizeButtons.forEach((button) => {
   });
 });
 
-const instagramLinks =
+const footerSocialEvents = {
+  instagram: 'instagram_click',
+  tiktok: 'tiktok_click',
+  substack: 'substack_click'
+};
+
+const footerSocialLinks =
   document.querySelectorAll(
-    '.footer-instagram[href="https://www.instagram.com/l.j.amorim/"]'
+    '[data-footer-social]'
   );
 
-instagramLinks.forEach((link) => {
+footerSocialLinks.forEach((link) => {
+  const eventName =
+    footerSocialEvents[
+      link.dataset.footerSocial
+    ];
+
+  if (!eventName) return;
+
   link.addEventListener('click', () => {
     sendAnalyticsEvent(
-      'instagram_click',
+      eventName,
       {
         link_url: link.href,
         link_location: 'footer'

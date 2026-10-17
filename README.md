@@ -28,7 +28,7 @@ Mantenha obras inéditas confidenciais fora do repositório público. O preview 
 
 ## Executar localmente
 
-Use Node.js 24.19.0 (também indicado em `.nvmrc`) e npm. Instale as dependências com `npm install` antes do primeiro build. A dependência de desenvolvimento `sharp` está fixada em 0.35.5 e gera variantes WebP responsivas e JPEG de 1200 × 630 para compartilhamento. Os originais são preservados.
+Use Node.js 24.19.0 (também indicado em `.nvmrc`) e npm. Instale as dependências com `npm ci` antes do primeiro build. A dependência de desenvolvimento `sharp` está fixada em 0.35.5 e gera variantes WebP responsivas e JPEG de 1200 × 630 para compartilhamento. Os originais são preservados.
 
 ```bash
 npm run build
@@ -76,4 +76,4 @@ Execute `npm test`, `npm run build:prod` e `npm run check`. A validação é cen
 
 O Google Analytics só é carregado após autorização expressa. A preferência fica no armazenamento local do navegador. A página `/privacidade/` explica os eventos e permite rever a escolha. Sem JavaScript, a navegação principal permanece acessível e nenhuma análise é carregada.
 
-Os workflows fixam Node.js e as ações por SHA. Para atualizar, confira a versão e o commit oficial de cada ação e execute as verificações antes de publicar. A instalação usa uma versão direta exata de sharp; um lockfile deverá acompanhar futuras atualizações de dependências para congelar também suas dependências transitivas.
+Os workflows fixam Node.js e as ações por SHA. Para atualizar, confira a versão e o commit oficial de cada ação e execute as verificações antes de publicar. A instalação usa npm ci e package-lock.json para fixar também as dependências transitivas.

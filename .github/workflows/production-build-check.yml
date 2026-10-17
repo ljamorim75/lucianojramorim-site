@@ -34,3 +34,7 @@ jobs:
         run: npm run build:prod
       - name: Validate Production Output
         run: npm run check
+      - name: Install Test Browser
+        run: npx playwright install --with-deps chromium
+      - name: Browser Regression Tests
+        run: npm run test:browser

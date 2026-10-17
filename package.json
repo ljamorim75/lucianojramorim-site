@@ -5,6 +5,14 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "build:prod": "node scripts/build.mjs --prod",
-    "serve": "node scripts/serve.mjs"
+    "serve": "node scripts/serve.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=24.19.0 <25"
+  },
+  "devDependencies": {
+    "sharp": "0.35.5"
   }
 }

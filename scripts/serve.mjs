@@ -1,3 +1,4 @@
+import { resolveRequestPath } from './site-utils.mjs';
 import {
   createReadStream,
   existsSync,
@@ -29,23 +30,15 @@ const mimeTypes = {
 };
 
 createServer((request, response) => {
-  const requestedPath = decodeURIComponent(
-    new URL(
-      request.url,
-      `http://${request.headers.host}`
-    ).pathname
-  );
-
-  let filePath = path.resolve(
-    webRoot,
-    `.${requestedPath}`
-  );
-
-  if (!filePath.startsWith(webRoot)) {
-    response
-      .writeHead(403)
-      .end();
-
+  let filePath;
+  try {
+    filePath = resolveRequestPath(webRoot, request.url);
+  } catch {
+    response.writeHead(400).end('Endereço inválido');
+    return;
+  }
+  if (!filePath) {
+    response.writeHead(403).end();
     return;
   }
 
@@ -66,7 +59,7 @@ createServer((request, response) => {
     const notFoundPage = path.join(webRoot, '404.html');
     if (existsSync(notFoundPage) && statSync(notFoundPage).isFile()) {
       response.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
-      createReadStream(notFoundPage).pipe(response);
+      createReadStream(notFoundPage).on('error', () => response.destroy()).pipe(response);
       return;
     }
 
@@ -97,7 +90,7 @@ createServer((request, response) => {
     }
   );
 
-  createReadStream(filePath).pipe(response);
+  createReadStream(filePath).on('error', () => response.destroy()).pipe(response);
 }).listen(
   port,
   '127.0.0.1',

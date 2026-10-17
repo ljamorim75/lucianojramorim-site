@@ -15,7 +15,7 @@ export function validateWorks(works, src) {
   assert(Array.isArray(works), 'O catálogo deve ser uma lista');
   const slugs = new Set();
   for (const work of works) {
-    assert(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(work.slug), 'Slug inválido');
+    assert(typeof work.slug === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(work.slug), 'Slug inválido');
     assert(!slugs.has(work.slug), `Slug repetido: ${work.slug}`);
     slugs.add(work.slug);
     assert(['preparacao', 'em_breve', 'publicado'].includes(work.status), `Estado inválido: ${work.slug}`);
@@ -31,6 +31,18 @@ export function validateWorks(works, src) {
       assert(/^\/assets\/img\/[a-z0-9-]+\.(png|jpe?g|webp)$/.test(work[key]), `Imagem inválida: ${work.slug}`);
       assert(existsSync(path.join(src, work[key].slice(1))), `Imagem ausente: ${work[key]}`);
     }
+  }
+}
+
+export function validateShelf(shelf) {
+  assert(Array.isArray(shelf), 'A estante deve ser uma lista');
+  const slugs = new Set();
+  for (const item of shelf) {
+    assert(typeof item.slug === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.slug), 'Slug inválido na estante');
+    assert(!slugs.has(item.slug), `Slug repetido na estante: ${item.slug}`);
+    slugs.add(item.slug);
+    assert(typeof item.titulo === 'string' && item.titulo.trim(), 'Título inválido na estante');
+    assert(Array.isArray(item.universoLinhas) && item.universoLinhas.length > 0 && item.universoLinhas.every(line => typeof line === 'string'), 'Universo inválido na estante');
   }
 }
 

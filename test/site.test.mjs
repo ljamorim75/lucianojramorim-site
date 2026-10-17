@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
-import { resolveRequestPath, escapeHtml, jsonForScript, validateWorks } from '../scripts/site-utils.mjs';
+import { resolveRequestPath, escapeHtml, jsonForScript, validateWorks, validateShelf } from '../scripts/site-utils.mjs';
 
 test('caminhos não escapam da raiz, inclusive para diretórios com prefixo semelhante', () => {
   const root = path.resolve('dist');
@@ -28,4 +28,6 @@ test('catálogo rejeita estados inválidos, caminhos externos e slugs duplicados
   assert.throws(() => validateWorks([{ ...work, status: 'desconhecido' }], 'src'));
   assert.throws(() => validateWorks([{ ...work, arquivoConteudo: '../segredo.html' }], 'src'));
   assert.throws(() => validateWorks([{ ...work, imagem: 'javascript:alert(1)' }], 'src'));
+  assert.throws(() => validateWorks([{ ...work, slug: undefined }], 'src'));
+  assert.throws(() => validateShelf([{ slug: '" onclick="alert(1)', titulo: 'Teste', universoLinhas: ['A'] }]));
 });

@@ -22,10 +22,6 @@ jobs:
         with:
           node-version: '24.19.0'
           package-manager-cache: false
-      - name: Resolve Dependency Lock
-        run: |
-          npm install --package-lock-only
-          node -e "console.log('LOCKFILE_BASE64=' + require('node:fs').readFileSync('package-lock.json').toString('base64'))"
       - name: Install Dependencies
         run: npm ci
       - name: Test

@@ -50,7 +50,7 @@ Os estados editoriais têm regras explícitas:
 - `em_breve`: aparece na Home e no catálogo com imagem, metadados, sinopse e EM BREVE; não possui link nem página de leitura e não entra no sitemap. Não exige manuscrito no build de produção.
 - `publicado`: aparece na biblioteca com link, gera página individual e entra no sitemap.
 
-Valores desconhecidos ficam excluídos da produção. No preview, todas as obras aparecem; páginas individuais são geradas quando o arquivo de conteúdo existe. Os ativos de `src/assets/` são copiados integralmente em ambos os modos.
+Estados desconhecidos são rejeitados pela validação, impedindo o build. No preview, todas as obras aparecem; páginas individuais são geradas quando o arquivo de conteúdo existe. Os ativos de `src/assets/` são copiados integralmente em ambos os modos.
 
 **ALERTA: NUNCA publicar diretamente uma saída gerada por `npm run build` se houver textos em preparação. Para publicação deve ser utilizado o build de produção.**
 
@@ -72,7 +72,7 @@ Nunca execute deployment sem revisar o build de produção. O workflow valida as
 
 ## Verificações e privacidade
 
-Execute `npm test`, `npm run build:prod` e `npm run check`. A validação é centralizada em `scripts/check.mjs`; execute-a somente após o build de produção. Testes de regressão cobrem contenção de caminhos, escape de metadados e regras editoriais.
+Execute `npm test`, `npm run build:prod` e `npm run check`. A validação é centralizada em `scripts/check.mjs`; execute-a somente após o build de produção. Testes de regressão cobrem contenção de caminhos, escape de metadados e regras editoriais. O workflow também executa testes no Chromium para menu, teclado, anúncios, leitura e consentimento; localmente, execute `npx playwright install chromium` e `npm run test:browser` após o build.
 
 O Google Analytics só é carregado após autorização expressa. A preferência fica no armazenamento local do navegador. A página `/privacidade/` explica os eventos e permite rever a escolha. Sem JavaScript, a navegação principal permanece acessível e nenhuma análise é carregada.
 

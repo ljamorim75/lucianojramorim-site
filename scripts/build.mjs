@@ -1,4 +1,4 @@
-import { validateWorks, escapeHtml, jsonForScript } from './site-utils.mjs';
+import { validateWorks, validateShelf, escapeHtml, jsonForScript } from './site-utils.mjs';
 import { optimizeImages } from './optimize-images.mjs';
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
@@ -324,6 +324,7 @@ const personSchema =
  */
 
 const shelf = JSON.parse(await readFile(path.join(src, 'data', 'home-shelf.json'), 'utf8'));
+validateShelf(shelf);
 const pageSlugs = new Set(pageWorks.map(work => work.slug));
 const homeSlots = shelf.map((spine) => {
   const work = visibleWorks.find((item) => item.slug === spine.slug);

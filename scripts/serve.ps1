@@ -5,6 +5,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $webRoot = [IO.Path]::GetFullPath((Join-Path $projectRoot 'dist'))
+$webRootPrefix = $webRoot.TrimEnd([IO.Path]::DirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
 $listener = [Net.HttpListener]::new()
 $listener.Prefixes.Add("http://localhost:$Port/")
 $listener.Start()
@@ -15,6 +16,9 @@ $mimeTypes = @{
   '.html' = 'text/html; charset=utf-8'
   '.js' = 'text/javascript; charset=utf-8'
   '.json' = 'application/json; charset=utf-8'
+  '.jpg' = 'image/jpeg'
+  '.jpeg' = 'image/jpeg'
+  '.webp' = 'image/webp'
   '.png' = 'image/png'
   '.svg' = 'image/svg+xml'
   '.txt' = 'text/plain; charset=utf-8'
@@ -24,9 +28,16 @@ $mimeTypes = @{
 try {
   while ($listener.IsListening) {
     $context = $listener.GetContext()
+    try {
+    if ($context.Request.RawUrl -match '%(?![0-9a-fA-F]{2})') { throw 'Endereço inválido' }
     $relativePath = [Uri]::UnescapeDataString($context.Request.Url.AbsolutePath.TrimStart('/'))
     $candidate = [IO.Path]::GetFullPath((Join-Path $webRoot $relativePath))
-    if (-not $candidate.StartsWith($webRoot, [StringComparison]::OrdinalIgnoreCase)) {
+    } catch {
+      $context.Response.StatusCode = 400
+      $context.Response.Close()
+      continue
+    }
+    if ($candidate -ne $webRoot -and -not $candidate.StartsWith($webRootPrefix, [StringComparison]::OrdinalIgnoreCase)) {
       $context.Response.StatusCode = 403
       $context.Response.Close()
       continue

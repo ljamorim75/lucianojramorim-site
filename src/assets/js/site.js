@@ -27,6 +27,8 @@ if (menuButton && menu) {
   }
 
   closeMenu();
+  menu.dataset.enhanced = '';
+  menuButton.dataset.ready = '';
   menuButton.addEventListener('click', toggleMenu);
 
   document.addEventListener('keydown', (event) => {
@@ -50,37 +52,34 @@ if (menuButton && menu) {
 const homeWorkLinks =
   document.querySelectorAll('[data-home-work]');
 
-homeWorkLinks.forEach((homeWorkLink) => {
-  const mobileViewport = window.matchMedia('(max-width: 47.99rem)');
-  const work = homeWorkLink.closest('.home-work--available');
-
-  function updateExpandedState() {
-    if (!homeWorkLink.hasAttribute('aria-expanded')) return;
-
-    const isExpanded = document.activeElement === homeWorkLink ||
-      (mobileViewport.matches && work?.classList.contains('is-open'));
-    homeWorkLink.setAttribute('aria-expanded', String(Boolean(isExpanded)));
+homeWorkLinks.forEach((control) => {
+  const work = control.closest('.home-work--available');
+  if (!work) return;
+  const isDisclosure = control instanceof HTMLButtonElement;
+  const mobile = window.matchMedia('(max-width: 47.99rem)');
+  function setExpanded(expanded) {
+    work.classList.toggle('is-open', expanded);
+    if (isDisclosure) control.setAttribute('aria-expanded', String(expanded));
   }
-
-  if (homeWorkLink.hasAttribute('aria-expanded')) {
-    homeWorkLink.addEventListener('focus', updateExpandedState);
-    homeWorkLink.addEventListener('blur', updateExpandedState);
-    mobileViewport.addEventListener('change', updateExpandedState);
+  if (isDisclosure) {
+    control.addEventListener('click', () => setExpanded(!work.classList.contains('is-open')));
+    control.addEventListener('keydown', event => {
+      if (event.key === 'Escape') setExpanded(false);
+    });
+    // O clique controla os anúncios; foco e hover expandem apenas links de leitura.
+    work.classList.add('home-work--disclosure');
+  } else {
+    control.addEventListener('click', event => {
+      if (mobile.matches && !work.classList.contains('is-open')) {
+        event.preventDefault();
+        setExpanded(true);
+      }
+    });
   }
-
-  homeWorkLink.addEventListener('click', (event) => {
-    const isMobile = mobileViewport.matches;
-
-    if (
-      isMobile &&
-      work &&
-      !work.classList.contains('is-open')
-    ) {
-      event.preventDefault();
-      work.classList.add('is-open');
-      updateExpandedState();
-    }
+  work.addEventListener('focusout', event => {
+    if (!work.contains(event.relatedTarget)) setExpanded(false);
   });
+  mobile.addEventListener('change', () => setExpanded(false));
 });
 
 const analyticsHosts = new Set([
@@ -88,9 +87,46 @@ const analyticsHosts = new Set([
   'www.lucianojramorim.com.br'
 ]);
 
-const analyticsEnabled =
-  analyticsHosts.has(window.location.hostname) &&
-  typeof window.gtag === 'function';
+let analyticsEnabled = false;
+const consentKey = 'lja-analytics-consent-v1';
+const consentBanner = document.querySelector('[data-consent-banner]');
+function readConsent() {
+  try { return localStorage.getItem(consentKey); } catch { return null; }
+}
+function startAnalytics() {
+  if (analyticsEnabled || !analyticsHosts.has(location.hostname)) return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', 'G-35T91X4MC3');
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-35T91X4MC3';
+  document.head.appendChild(script);
+  analyticsEnabled = true;
+}
+if (readConsent() === 'accepted') startAnalytics();
+if (consentBanner && !['accepted', 'rejected'].includes(readConsent())) consentBanner.hidden = false;
+document.querySelectorAll('[data-consent]').forEach(button => {
+  button.addEventListener('click', () => {
+    const choice = button.dataset.consent;
+    try { localStorage.setItem(consentKey, choice); } catch { /* Vale apenas para esta visita. */ }
+    consentBanner.hidden = true;
+    if (choice === 'accepted') startAnalytics();
+  });
+});
+document.querySelector('[data-privacy-settings]')?.addEventListener('click', () => {
+  try { localStorage.removeItem(consentKey); } catch { /* Armazenamento indisponível. */ }
+  window['ga-disable-G-35T91X4MC3'] = true;
+  document.cookie.split(';').forEach(cookie => {
+    const name = cookie.split('=')[0].trim();
+    if (!/^_ga(?:_|$)/.test(name)) return;
+    for (const domain of ['', location.hostname, '.lucianojramorim.com.br']) {
+      document.cookie = name + '=; Max-Age=0; path=/' + (domain ? '; domain=' + domain : '');
+    }
+  });
+  location.reload();
+});
 
 function sendAnalyticsEvent(eventName, eventParameters = {}) {
   if (!analyticsEnabled) return false;

@@ -1,3 +1,5 @@
+import { validateWorks, validateShelf, escapeHtml, jsonForScript } from './site-utils.mjs';
+import { optimizeImages } from './optimize-images.mjs';
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
@@ -6,7 +8,6 @@ const root = process.cwd();
 const src = path.join(root, 'src');
 const dist = path.join(root, 'dist');
 const domain = 'https://lucianojramorim.com.br';
-const googleAnalyticsId = 'G-35T91X4MC3';
 const isProduction = process.argv.includes('--prod');
 
 const allWorks = JSON.parse(
@@ -15,6 +16,8 @@ const allWorks = JSON.parse(
     'utf8'
   )
 );
+
+validateWorks(allWorks, src);
 
 const visibleWorks = isProduction
   ? allWorks.filter(
@@ -48,6 +51,14 @@ await cp(
     recursive: true
   }
 );
+
+const images = await optimizeImages({ src, dist, works: allWorks });
+
+function workImage(work, className = '', loading = 'lazy') {
+  if (!work.imagem) return '';
+  const image = images[work.imagem];
+  return `<img class="${className}" src="${image.src}" srcset="${image.srcset}" sizes="(max-width: 47.99rem) 100vw, 60vw" width="${image.width}" height="${image.height}" alt="" loading="${loading}" decoding="async">`;
+}
 
 const hasEmblem = existsSync(
   path.join(
@@ -115,6 +126,7 @@ function footerLower(className = '') {
   return `<div class="footer-lower${className ? ` ${className}` : ''}">
     ${footerCopyright()}
     ${footerSocialLinks()}
+    <a class="privacy-link" href="/privacidade/">Privacidade</a>
   </div>`;
 }
 
@@ -137,7 +149,7 @@ function layout({
   const isHome = current === 'inicio';
 
   const socialImageUrl = socialImage
-    ? `${domain}${socialImage.startsWith('/') ? '' : '/'}${socialImage}`
+    ? `${domain}${images[socialImage]?.social || socialImage}`
     : '';
 
   const socialAlt = socialImageAlt || title;
@@ -177,37 +189,9 @@ function layout({
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <script>
-    (() => {
-      const analyticsHosts = new Set([
-        'lucianojramorim.com.br',
-        'www.lucianojramorim.com.br'
-      ]);
+  <title>${escapeHtml(title)}</title>
 
-      if (!analyticsHosts.has(window.location.hostname)) return;
-
-      const measurementId = '${googleAnalyticsId}';
-      const googleTag = document.createElement('script');
-
-      googleTag.async = true;
-      googleTag.src =
-        'https://www.googletagmanager.com/gtag/js?id=' +
-        measurementId;
-
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function gtag() {
-        window.dataLayer.push(arguments);
-      };
-
-      window.gtag('js', new Date());
-      window.gtag('config', measurementId);
-      document.head.appendChild(googleTag);
-    })();
-  </script>
-
-  <title>${title}</title>
-
-  <meta name="description" content="${description}">
+  <meta name="description" content="${escapeHtml(description)}">
   <meta name="theme-color" content="#070708">
 
   ${includeCanonical ? `<link rel="canonical" href="${canonical}">` : ''}
@@ -230,21 +214,21 @@ function layout({
   ${social ? `<meta property="og:type" content="${socialType}">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="Luciano Jr Amorim">
-  <meta property="og:title" content="${title}">
-  <meta property="og:description" content="${description}">
+  <meta property="og:title" content="${escapeHtml(title)}">
+  <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${canonical}">
 
   ${socialImageUrl ? `<meta property="og:image" content="${socialImageUrl}">
-  <meta property="og:image:alt" content="${socialAlt}">
+  <meta property="og:image:alt" content="${escapeHtml(socialAlt)}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">` : ''}
 
   <meta name="twitter:card" content="${socialImageUrl ? 'summary_large_image' : 'summary'}">
-  <meta name="twitter:title" content="${title}">
-  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:title" content="${escapeHtml(title)}">
+  <meta name="twitter:description" content="${escapeHtml(description)}">
 
   ${socialImageUrl ? `<meta name="twitter:image" content="${socialImageUrl}">
-  <meta name="twitter:image:alt" content="${socialAlt}">` : ''}` : ''}
+  <meta name="twitter:image:alt" content="${escapeHtml(socialAlt)}">` : ''}` : ''}
 
   <link rel="stylesheet" href="/assets/css/site.css">
 
@@ -292,6 +276,11 @@ function layout({
 
 ${footer}
 
+  <section class="consent-banner" aria-label="Preferências de privacidade" data-consent-banner hidden>
+    <p>Com sua autorização, usamos o Google Analytics para entender visitas e leitura. <a href="/privacidade/">Saiba mais</a>.</p>
+    <button type="button" data-consent="accepted">Aceitar análise</button>
+    <button type="button" data-consent="rejected">Recusar</button>
+  </section>
   <script type="module" src="/assets/js/site.js"></script>
 </body>
 </html>`;
@@ -321,7 +310,7 @@ async function writePage(route, html) {
 }
 
 const personSchema =
-  `<script type="application/ld+json">${JSON.stringify({
+  `<script type="application/ld+json">${jsonForScript({
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: 'Luciano Jr Amorim',
@@ -335,6 +324,8 @@ const personSchema =
  */
 
 const shelf = JSON.parse(await readFile(path.join(src, 'data', 'home-shelf.json'), 'utf8'));
+validateShelf(shelf);
+const pageSlugs = new Set(pageWorks.map(work => work.slug));
 const homeSlots = shelf.map((spine) => {
   const work = visibleWorks.find((item) => item.slug === spine.slug);
   return work
@@ -344,7 +335,7 @@ const homeSlots = shelf.map((spine) => {
 
 const homeItems = homeSlots
   .map(
-    (work) => {
+    (work, index) => {
       const universeLines = work.universoLinhas;
 
       const media =
@@ -353,49 +344,46 @@ const homeItems = homeSlots
               class="home-work-media"
               aria-hidden="true"
             >
-              <img
-                src="${work.imagem}"
-                alt=""
-              >
+              ${workImage(work, '', index === 0 ? 'eager' : 'lazy')}
             </span>`
           : '';
 
-      const isUpcoming = work.homePlaceholder || (work.status === 'em_breve' && (isProduction || !pageWorks.includes(work)));
+      const isUpcoming = work.homePlaceholder || (work.status === 'em_breve' && (isProduction || !pageSlugs.has(work.slug)));
       const tag = isUpcoming ? 'button' : 'a';
 
       return `<li class="home-work home-work--available${work.homePlaceholder ? ' home-work--future' : ''}">
         <${tag}
           class="home-work-link"
-          ${isUpcoming ? `type="button" aria-label="${work.titulo} — em breve" aria-expanded="false" aria-controls="${work.slug}-details"` : `href="/textos/${work.slug}/"`}
+          ${isUpcoming ? `type="button" aria-label="${escapeHtml(work.titulo)} — em breve" aria-expanded="false" aria-controls="${work.slug}-details"` : `href="/textos/${work.slug}/"`}
           data-home-work
         >
           ${media}
 
           <span class="home-work-composition">
             <span class="home-work-title">
-              ${work.titulo}
+              ${escapeHtml(work.titulo)}
             </span>
 
             <span class="home-work-details"${isUpcoming ? ` id="${work.slug}-details"` : ''}>
-              ${isUpcoming ? `<span class="home-work-announcement-title">${work.titulo}</span>
+              ${isUpcoming ? `<span class="home-work-announcement-title">${escapeHtml(work.titulo)}</span>
               <span class="home-work-announcement-universe">
-                ${universeLines.map((line) => `<span class="home-work-universe-line">${line}</span>`).join('')}
+                ${universeLines.map((line) => `<span class="home-work-universe-line">${escapeHtml(line)}</span>`).join('')}
               </span>` : `
               ${work.tipo ? `<span class="home-work-meta">
-                ${work.tipo} · ${work.genero}
+                ${escapeHtml(work.tipo)} · ${escapeHtml(work.genero)}
               </span>` : ''}
 
               <span class="home-work-synopsis">
-                ${work.sinopse}
+                ${escapeHtml(work.sinopse)}
               </span>`}
 
               <span class="home-work-action">
-                ${isUpcoming ? 'EM BREVE' : `Ler ${work.titulo}`}
+                ${isUpcoming ? 'EM BREVE' : `Ler ${escapeHtml(work.titulo)}`}
               </span>
             </span>
           </span>
           <span class="home-work-universe">
-            ${universeLines.map((line) => `<span class="home-work-universe-line">${line}</span>`).join('')}
+            ${universeLines.map((line) => `<span class="home-work-universe-line">${escapeHtml(line)}</span>`).join('')}
           </span>
         </${tag}>
       </li>`;
@@ -440,22 +428,22 @@ await writePage(
 const catalogue = visibleWorks
   .map(
     (work) => {
-      const isUpcoming = work.status === 'em_breve' && (isProduction || !pageWorks.includes(work));
+      const isUpcoming = work.status === 'em_breve' && (isProduction || !pageSlugs.has(work.slug));
       const tag = isUpcoming ? 'article' : 'a';
       return `<${tag}
         class="text-work"
         ${isUpcoming ? '' : `href="/textos/${work.slug}/"`}
       >
-          ${work.imagem ? `<img class="text-work-image" src="${work.imagem}" alt="" loading="lazy">` : ''}
-          <h2 class="text-work-title">${work.titulo}</h2>
+          ${workImage(work, 'text-work-image')}
+          <h2 class="text-work-title">${escapeHtml(work.titulo)}</h2>
 
           <span class="text-work-meta">
-            ${work.tipo} · ${work.genero}
+            ${escapeHtml(work.tipo)} · ${escapeHtml(work.genero)}
           </span>
           ${isUpcoming ? '<span class="text-work-status">EM BREVE</span>' : ''}
 
         <p class="text-work-synopsis">
-          ${work.sinopse}
+          ${escapeHtml(work.sinopse)}
         </p>
       </${tag}>`;
     }
@@ -633,7 +621,7 @@ for (const work of pageWorks) {
     );
 
   const creativeWorkSchema =
-    `<script type="application/ld+json">${JSON.stringify({
+    `<script type="application/ld+json">${jsonForScript({
       '@context':
         'https://schema.org',
 
@@ -670,7 +658,7 @@ for (const work of pageWorks) {
       .toLocaleLowerCase(
         'pt-BR'
       ) !== 'a definir'
-      ? `<span>${work.tempoLeitura} de leitura</span>`
+      ? `<span>${escapeHtml(work.tempoLeitura)} de leitura</span>`
       : '';
 
   const story =
@@ -683,11 +671,11 @@ for (const work of pageWorks) {
     `<header class="story-header">
       <div class="shell">
         <p class="eyebrow">
-          ${work.tipo} · ${work.genero}
+          ${escapeHtml(work.tipo)} · ${escapeHtml(work.genero)}
         </p>
 
         <h1>
-          ${work.titulo}
+          ${escapeHtml(work.titulo)}
         </h1>
 
         <p class="story-byline">
@@ -743,7 +731,7 @@ for (const work of pageWorks) {
 
     `<footer class="story-end">
       <p>
-        ${work.titulo}
+        ${escapeHtml(work.titulo)}
       </p>
 
       <p>
@@ -761,7 +749,7 @@ for (const work of pageWorks) {
     `/textos/${work.slug}/`,
     layout({
       title:
-        `${work.titulo} — Luciano Jr Amorim`,
+        `${escapeHtml(work.titulo)} — Luciano Jr Amorim`,
 
       description:
         work.sinopse,
@@ -788,7 +776,7 @@ for (const work of pageWorks) {
         'article',
 
       socialImageAlt:
-        `${work.titulo} \u2014 um conto de Luciano Jr Amorim`
+        `${escapeHtml(work.titulo)} \u2014 um conto de Luciano Jr Amorim`
     })
   );
 }
@@ -826,7 +814,27 @@ await writeFile(
   'utf8'
 );
 
+await writePage('/privacidade/', layout({
+  title: 'Privacidade — Luciano Jr Amorim',
+  description: 'Informações sobre navegação, análise de visitas e preferências de privacidade.',
+  route: '/privacidade/', current: '',
+  content: `<section class="page-intro"><div class="shell privacy-content">
+    <h1>Privacidade</h1>
+    <p>Este site publica textos literários. Você pode navegar e ler sem autorizar ferramentas de análise.</p>
+    <h2>Análise de visitas e leitura</h2>
+    <p>Somente após sua autorização, carregamos o Google Analytics, fornecido pelo Google, para medir visitas, início e progresso de leitura e cliques nas redes sociais. Os eventos incluem o título ou identificador da obra e, nos links sociais, o endereço de destino. O serviço pode usar cookies e processar informações técnicas da navegação, inclusive fora do Brasil.</p>
+    <p>Não enviamos ao Analytics o conteúdo de mensagens de e-mail. Consulte também a <a href="https://policies.google.com/privacy">política de privacidade do Google</a>.</p>
+    <h2>Sua escolha</h2>
+    <p>Salvamos sua escolha neste navegador, quando o armazenamento está disponível. Ao recusar, a ferramenta de análise não é carregada. Você pode rever sua escolha a qualquer momento pelo botão abaixo. Ao revogar uma autorização, a página será recarregada e tentaremos remover os cookies de análise deste domínio.</p>
+    <button class="button" type="button" data-privacy-settings>Rever preferências de análise</button>
+    <h2>Hospedagem e contato</h2>
+    <p>O site é hospedado pelo GitHub Pages. O provedor pode processar registros técnicos necessários à entrega e segurança das páginas. Mensagens enviadas por e-mail são tratadas pelo serviço de e-mail para atender ao seu contato.</p>
+    <p>Para dúvidas ou solicitações relacionadas à privacidade, escreva para <a href="mailto:contato.ljamorim@gmail.com">contato.ljamorim@gmail.com</a>.</p>
+  </div></section>`
+}));
+
 const routes = [
+  '/privacidade/',
   '/',
 
   '/textos/',

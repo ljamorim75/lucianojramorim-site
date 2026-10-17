@@ -14,55 +14,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
       - name: Setup Node.js LTS
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
-          node-version: 'lts/*'
+          node-version: '24.19.0'
           package-manager-cache: false
+      - name: Install Dependencies
+        run: npm ci
+      - name: Test
+        run: npm test
       - name: Build Production
         run: npm run build:prod
       - name: Validate Production Output
-        run: |
-          node --input-type=module <<'NODE'
-          import assert from 'node:assert/strict';
-          import { existsSync, readFileSync, readdirSync } from 'node:fs';
-          import path from 'node:path';
-
-          for (const file of ['index.html', 'textos/index.html', 'autor/index.html', 'contato/index.html', 'robots.txt', 'sitemap.xml', 'CNAME', '404.html']) {
-            assert(existsSync(`dist/${file}`), `Missing output: ${file}`);
-          }
-          assert.equal(readFileSync('dist/CNAME', 'utf8').trim(), 'lucianojramorim.com.br');
-          const works = JSON.parse(readFileSync('src/data/textos.json', 'utf8'));
-          assert.equal(works.find((work) => work.slug === 'monaksia')?.status, 'publicado');
-          assert(existsSync('dist/textos/monaksia/index.html'), 'Published story missing');
-          assert(readFileSync('dist/sitemap.xml', 'utf8').includes('https://lucianojramorim.com.br/textos/monaksia/'), 'Published route missing');
-          for (const file of ['dist/index.html', 'dist/textos/index.html']) {
-            const html = readFileSync(file, 'utf8');
-            const monaksiaLink = html.match(/<a\b[^>]*href="\/textos\/monaksia\/"[^>]*>[\s\S]*?<\/a>/u)?.[0];
-            assert(monaksiaLink?.includes('MONAKSÍA') && !/EM BREVE/iu.test(monaksiaLink), `Published metadata incorrect: ${file}`);
-            assert(html.includes('href="/textos/monaksia/"'), `Published link missing: ${file}`);
-          }
-          const story = readFileSync('dist/textos/monaksia/index.html', 'utf8');
-          for (const marker of ['PROJETO MONAKSÍA', 'POPULAÇÃO: 0', 'REDE 23.5', 'INDIVÍDUO 18', 'data-reading-content']) {
-            assert(story.includes(marker), `Published story marker missing: ${marker}`);
-          }
-          function validatePages(directory) {
-            for (const entry of readdirSync(directory, { withFileTypes: true })) {
-              const file = path.join(directory, entry.name);
-              if (entry.isDirectory()) {
-                validatePages(file);
-              } else if (entry.name.endsWith('.html')) {
-                assert(!/manuscript-placeholder|manuscript-status|Publicação em preparação/iu.test(readFileSync(file, 'utf8')), `Draft placeholder in ${file}`);
-              }
-            }
-          }
-          validatePages('dist');
-          const notFound = readFileSync('dist/404.html', 'utf8');
-          assert(notFound.includes('noindex, follow'), '404 must be noindex');
-          assert(notFound.includes('href="/"') && notFound.includes('href="/textos/"'), '404 navigation missing');
-          assert(!/rel="canonical"|monaks[ií]a|manuscript/iu.test(notFound), 'Unexpected 404 metadata or content');
-          assert(!readFileSync('dist/sitemap.xml', 'utf8').includes('/404'), '404 in sitemap');
-          NODE
+        run: npm run check
+      - name: Install Test Browser
+        run: npx playwright install --with-deps chromium
+      - name: Browser Regression Tests
+        run: npm run test:browser

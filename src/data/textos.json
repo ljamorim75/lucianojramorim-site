@@ -82,5 +82,17 @@
     "arquivoConteudo": "o-estalo-seco-o-corte-seco.html",
     "imagem": "/assets/img/o-estalo-seco-o-corte-seco.png",
     "imagemSocial": "/assets/img/og-o-estalo-seco-o-corte-seco.png"
+  },
+  {
+    "numero": "10",
+    "titulo": "A DECISÃO",
+    "slug": "a-decisao",
+    "tipo": "Conto",
+    "genero": "Fantasia",
+    "sinopse": "Um menino pode curar os ferimentos da mãe. Dentro de casa, porém, esse dom não basta para protegê-los.",
+    "status": "publicado",
+    "dataPublicacao": "2026-10-20",
+    "tempoLeitura": "5 min",
+    "arquivoConteudo": "a-decisao.html"
   }
 ]

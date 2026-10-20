@@ -8,7 +8,7 @@
   { "slug": "o-cubo", "titulo": "O CUBO", "universoLinhas": ["RESTOS"] },
   { "slug": "o-bosque", "titulo": "O BOSQUE", "universoLinhas": ["FRAGMENTOS"] },
   { "slug": "o-jardim", "titulo": "O JARDIM", "universoLinhas": ["SEM", "DESTINATÁRIO", "CONHECIDO"] },
-  { "slug": "escolha", "titulo": "ESCOLHA", "universoLinhas": ["O", "DOM"] },
+  { "slug": "a-decisao", "titulo": "A DECISÃO", "universoLinhas": ["O", "DOM"] },
   { "slug": "a-numantina", "titulo": "A NUMANTINA", "universoLinhas": ["O", "OUTRO", "LADO", "DA", "GLÓRIA"] },
   { "slug": "o-visitante", "titulo": "O VISITANTE", "universoLinhas": ["O", "OBSERVADOR"] }
 ]

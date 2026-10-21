@@ -93,6 +93,8 @@
     "status": "publicado",
     "dataPublicacao": "2026-10-20",
     "tempoLeitura": "5 min",
-    "arquivoConteudo": "a-decisao.html"
+    "arquivoConteudo": "a-decisao.html",
+    "imagem": "/assets/img/a-decisao.jpg",
+    "imagemSocial": "/assets/img/og-a-decisao.jpg"
   }
 ]
